@@ -1,6 +1,24 @@
-# Nama project sengaja "bemai-lokal" supaya volume lama
-# (bemai-lokal_postgres_data, bemai-lokal_materi_data) tetap terpakai.
+# Nama project sengaja "bemai-lokal" supaya volume lama tetap terpakai.
+# Tidak ada berkas .env di repo ini. Nilai di bawah memakai default yang aman
+# untuk dipakai di laptop; untuk menggantinya, set variabel yang sama di
+# lingkungan shell sebelum menjalankan compose (atau pakai .env lokal, yang
+# tidak ikut di-commit).
 name: bemai-lokal
+
+x-app-env: &app-env
+  APP_ENV: ${APP_ENV:-development}
+  APP_ORIGINS: ${APP_ORIGINS:-http://localhost:8899,http://127.0.0.1:8899}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
+  AI_ENABLED: ${AI_ENABLED:-true}
+  AI_API_KEY: ${AI_API_KEY:-}
+  AI_BASE_URL: ${AI_BASE_URL:-https://api.deepseek.com}
+  AI_MODEL: ${AI_MODEL:-deepseek-flash}
+  AI_MAX_TOKENS: ${AI_MAX_TOKENS:-220}
+  AI_KUOTA_HARIAN: ${AI_KUOTA_HARIAN:-10}
+  RETENSI_NILAI_HARI: ${RETENSI_NILAI_HARI:-180}
+  RETENSI_AKTIVITAS_HARI: ${RETENSI_AKTIVITAS_HARI:-90}
+  ENABLE_STUDENT_DEMO_LOGIN: ${ENABLE_STUDENT_DEMO_LOGIN:-false}
+  CUSTOMER_SERVICE_URL: ${CUSTOMER_SERVICE_URL:-}
 
 services:
   db:
@@ -9,7 +27,7 @@ services:
     environment:
       POSTGRES_USER: bemai
       POSTGRES_DB: bemai
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD wajib diisi di .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bemai_lokal_dev}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -24,9 +42,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    env_file: [.env]
     environment:
-      DATABASE_URL: postgresql+psycopg://bemai:${POSTGRES_PASSWORD}@db:5432/bemai
+      <<: *app-env
+      DATABASE_URL: postgresql+psycopg://bemai:${POSTGRES_PASSWORD:-bemai_lokal_dev}@db:5432/bemai
 
   backend:
     build: ./backend
@@ -36,9 +54,9 @@ services:
         condition: service_healthy
       migrate:
         condition: service_completed_successfully
-    env_file: [.env]
     environment:
-      DATABASE_URL: postgresql+psycopg://bemai:${POSTGRES_PASSWORD}@db:5432/bemai
+      <<: *app-env
+      DATABASE_URL: postgresql+psycopg://bemai:${POSTGRES_PASSWORD:-bemai_lokal_dev}@db:5432/bemai
       GAMBAR_MATERI_DIR: /app/data/materi
     volumes:
       - materi_data:/app/data/materi
@@ -54,9 +72,9 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
-    env_file: [.env]
     environment:
-      DATABASE_URL: postgresql+psycopg://bemai:${POSTGRES_PASSWORD}@db:5432/bemai
+      <<: *app-env
+      DATABASE_URL: postgresql+psycopg://bemai:${POSTGRES_PASSWORD:-bemai_lokal_dev}@db:5432/bemai
 
   frontend:
     build: ./frontend

@@ -21,9 +21,22 @@ menjalankan di laptop sendiri).
 ## Menjalankan dengan Docker
 
 ```bash
-cp .env.example .env          # lalu isi POSTGRES_PASSWORD dan AI_API_KEY
 docker compose up -d --build
 ```
+
+Tanpa konfigurasi tambahan, compose langsung jalan dengan nilai bawaan (kata sandi
+basis data lokal `bemai_lokal_dev`). Untuk mengubahnya, set variabel sebelum
+menjalankan compose, misalnya:
+
+```bash
+export POSTGRES_PASSWORD=sandi-acak-anda
+export AI_API_KEY=kunci-layanan-ai          # opsional, kosong = fitur AI mati
+docker compose up -d --build
+```
+
+Berkas `.env` tidak disertakan di repo, karena di situlah kunci API biasanya
+disimpan. `.env` sudah masuk `.gitignore`; kalau ingin memakainya, buat sendiri di
+laptop masing-masing, jangan di-commit.
 
 Buka `http://127.0.0.1:8899/`. Isinya lima layanan: `db` (PostgreSQL 17),
 `migrate` (menyiapkan tabel sekali jalan), `backend` (uvicorn di port 8000, tidak
@@ -70,7 +83,7 @@ folder kerja aslinya, jadi berkas berikut belum ada:
 
 - `docs/` (panduan menjalankan & operasional)
 - `tests/` (37 tes otomatis) dan `scripts/probe_rbac.py`
-- `.env` asli (contohnya ada di `.env.example`)
+- `.env` (memang sengaja tidak disertakan, isinya kunci API)
 
 Catatan: `frontend` di sini disajikan apa adanya (nginx di produksi memakai
 folder `src/` yang sama, tanpa proses build).
