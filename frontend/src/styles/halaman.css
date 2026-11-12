@@ -1,0 +1,1650 @@
+/* ════════════════════════════════════════════════════════════════
+   HALAMAN.CSS · MugaMind 2026 · SMP Muhammadiyah 3 Ciledug
+   Chat, Latihan Soal, Bank Soal, Materi, Analisis & Modals
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Subject / Mapel Identity & Vibrant Accents ──────────────────── */
+.mapel-ipa  { --ma: 16, 185, 129; --ma-bg: #ECFDF5; --ma-border: #A7F3D0; } /* Emerald */
+.mapel-mtk  { --ma: 59, 130, 246; --ma-bg: #EFF6FF; --ma-border: #BFDBFE; } /* Royal Blue */
+.mapel-bin  { --ma: 249, 115, 22; --ma-bg: #FFF7ED; --ma-border: #FED7AA; } /* Terracotta */
+.mapel-ips  { --ma: 139, 92, 246; --ma-bg: #F5F3FF; --ma-border: #DDD6FE; } /* Purple */
+.mapel-ing  { --ma: 236, 72, 153; --ma-bg: #FDF2F8; --ma-border: #FBCFE8; } /* Pink */
+.mapel-agm  { --ma: 245, 158, 11; --ma-bg: #FFFBEB; --ma-border: #FDE68A; } /* Muhammadiyah Gold */
+
+.mapel-ikon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(var(--ma, 16, 185, 129), 0.12);
+  color: rgb(var(--ma, 16, 185, 129));
+  font-weight: 800;
+  font-size: 0.75rem;
+}
+
+/* ── Chat / Tanya MugaMind ──────────────────────────────────────────── */
+.card.chat {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 64px - 140px);
+  min-height: 480px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.card.chat .kartu-judul {
+  padding: 20px 24px;
+  margin: 0;
+  background: #FFFFFF;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--krem);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+
+.bubble {
+  max-width: 76%;
+  padding: 14px 20px;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  border-radius: 20px;
+  position: relative;
+  word-break: break-word;
+  animation-duration: 0.25s;
+  animation-fill-mode: both;
+}
+
+/* Bot Message Bubble — Crisp White with Emerald Accent */
+.bubble.bot {
+  background: #FFFFFF;
+  color: var(--teks);
+  border: 1px solid var(--line);
+  border-left: 3.5px solid var(--hijau);
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  align-self: flex-start;
+  animation-name: slideInLeft;
+}
+
+.bubble.bot .sumber {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--hijau-tua);
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+}
+
+/* User Message Bubble — Vibrant Gradient Emerald */
+.bubble.me {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+  align-self: flex-end;
+  animation-name: slideInRight;
+}
+
+/* Typing Indicator */
+.bubble.bot.mengetik {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 22px;
+}
+.bubble.bot.mengetik i {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--hijau);
+  animation: pulse 1.2s infinite ease-in-out;
+}
+.bubble.bot.mengetik i:nth-child(2) { animation-delay: 0.2s; }
+.bubble.bot.mengetik i:nth-child(3) { animation-delay: 0.4s; }
+
+/* Quick Action Chips */
+#chipCepat {
+  padding: 10px 24px 0;
+  background: var(--krem);
+}
+#chipCepat .tag {
+  cursor: pointer;
+  background: #FFFFFF;
+  border: 1.5px solid var(--line);
+  color: var(--teks-2);
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-xs);
+}
+#chipCepat .tag:hover {
+  border-color: var(--hijau);
+  background: var(--hijau-soft);
+  color: var(--hijau-gelap);
+  transform: translateY(-1px);
+}
+
+.chat-status {
+  padding: 4px 24px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: var(--krem);
+}
+
+/* Floating Chat Input Box */
+.chatbox {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--putih);
+  border-top: 1px solid var(--line);
+}
+
+.chatbox textarea {
+  flex: 1;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 16px;
+  min-height: 44px;
+  max-height: 120px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--teks);
+  background: var(--krem);
+}
+
+.chatbox textarea::placeholder {
+  color: var(--muted);
+}
+
+.chatbox textarea:focus {
+  background: var(--putih);
+  color: var(--teks);
+  border-color: var(--hijau);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.chatbox .btn.primary {
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 12px;
+}
+
+/* ── Segmented Control Tabs (.tabsoal, .tabbar) ──────────────────── */
+.tabsoal {
+  margin-top: 16px;
+}
+
+.tabinput {
+  display: none;
+}
+
+.tabbar {
+  display: inline-flex;
+  background: var(--krem-2);
+  padding: 4px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.tabbar label {
+  padding: 9px 22px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  margin: 0;
+  user-select: none;
+}
+
+.tabbar label:hover {
+  color: var(--teks);
+}
+
+/* Checked Tab Active States */
+#tabSoalA:checked ~ .tabbar label[for="tabSoalA"],
+#tabSoalB:checked ~ .tabbar label[for="tabSoalB"],
+#tabSoalC:checked ~ .tabbar label[for="tabSoalC"] {
+  background: #FFFFFF;
+  color: var(--hijau-gelap);
+  font-weight: 750;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.tabpanel {
+  display: none;
+}
+
+#tabSoalA:checked ~ .tabpanel.panel-a {
+  display: block;
+  animation: fadeIn 0.2s var(--ease);
+}
+
+#tabSoalB:checked ~ .tabpanel.panel-b {
+  display: block;
+  animation: fadeIn 0.2s var(--ease);
+}
+
+#tabSoalC:checked ~ .tabpanel.panel-c {
+  display: block;
+  animation: fadeIn 0.2s var(--ease);
+}
+
+/* ── Soal Gambar & Essay Styling ──────────────────────────────────── */
+.quiz-image-wrap {
+  margin: 12px 0 16px 0;
+  max-width: 100%;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #f8fafc;
+  display: inline-block;
+}
+
+.quiz-img {
+  max-width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  display: block;
+}
+
+.preview-gambar-wrap {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.preview-gambar-wrap img {
+  max-width: 160px;
+  max-height: 120px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  object-fit: contain;
+  background: #f8fafc;
+}
+
+.quiz-essay-wrap {
+  margin: 12px 0 16px 0;
+}
+
+.quiz-essay-input {
+  width: 100%;
+  min-height: 110px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--teks);
+  background: #ffffff;
+  resize: vertical;
+  transition: border-color 0.2s var(--ease);
+}
+
+.quiz-essay-input:focus {
+  outline: none;
+  border-color: var(--hijau);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.draft-item-soal {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.draft-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.draft-item-soal b {
+  font-size: 0.95rem;
+  color: var(--teks);
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ── Quick Quiz Picker Cards (.pilih-kartu) ──────────────────────── */
+.pilih-kartu {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.pilih-kartu button {
+  background: #FFFFFF;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+  transition: all 0.2s var(--ease);
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  overflow: hidden;
+}
+
+.pilih-kartu button:hover {
+  border-color: rgb(var(--ma, 16, 185, 129));
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px -4px rgba(var(--ma, 16, 185, 129), 0.2);
+}
+
+.pilih-kartu button .pk-atas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.pilih-kartu button .tag.mapel {
+  background: rgba(var(--ma, 16, 185, 129), 0.1);
+  color: rgb(var(--ma, 16, 185, 129));
+  border-color: rgba(var(--ma, 16, 185, 129), 0.25);
+}
+
+.pilih-kartu button b {
+  font-size: 1rem;
+  font-weight: 750;
+  color: var(--teks);
+  line-height: 1.4;
+}
+
+.pilih-kartu button .pk-bawah {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.pilih-kartu button .pk-aksi {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgb(var(--ma, 16, 185, 129));
+}
+
+.pilih-kartu button.sudah-selesai {
+  background: #fbfdfc;
+  border-color: #d1fae5;
+  opacity: 0.95;
+}
+
+.pilih-kartu button.sudah-selesai:hover {
+  border-color: #10b981;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px -2px rgba(16, 185, 129, 0.15);
+}
+
+.pilih-kartu button .pk-aksi.selesai {
+  color: #065f46;
+  font-weight: 700;
+  background: var(--hijau-muda);
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  border: 1px solid #86efac;
+}
+
+/* ── Quiz & Latihan Active Area ──────────────────────────────────── */
+.quiz-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.bilah-jawab {
+  height: 9px;
+  background: var(--krem-2);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.bilah-jawab span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #10B981, #34D399);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.quiz-question {
+  border: none;
+  padding: 0;
+  margin: 0 0 28px;
+}
+
+.quiz-question legend {
+  font-size: 1.05rem;
+  font-weight: 750;
+  color: var(--teks);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.opsi {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: #FFFFFF;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--teks-2);
+  margin-bottom: 10px;
+  transition: all 0.15s ease;
+}
+
+.opsi:hover {
+  border-color: var(--hijau);
+  background: var(--hijau-soft);
+}
+
+.opsi:has(input:checked) {
+  border-color: var(--hijau);
+  background: #ECFDF5;
+  color: var(--hijau-gelap);
+  font-weight: 650;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+/* ── Empty State (.kosong) ───────────────────────────────────────── */
+.kosong {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 56px 24px;
+  gap: 12px;
+  background: #FFFFFF;
+  border: 1px dashed var(--line-2);
+  border-radius: 18px;
+}
+
+.kosong-ikon {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: var(--hijau-soft);
+  border: 1px solid var(--hijau-border);
+  color: var(--hijau-tua);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.kosong b {
+  font-size: 1.05rem;
+  color: var(--teks);
+}
+
+.kosong p {
+  max-width: 440px;
+  margin: 0;
+}
+
+/* ── Library Toolbar & Search ────────────────────────────────────── */
+.library-tools, .library-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.library-toolbar .search-field {
+  flex: 1;
+  min-width: 240px;
+}
+
+/* ── Upload Workflow (.langkah, .unggah-area) ─────────────────────── */
+.langkah {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.langkah span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  background: var(--krem-2);
+  border: 1px solid var(--line);
+}
+
+.langkah span b {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--muted-muda);
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.langkah span.aktif {
+  background: var(--hijau-soft);
+  border-color: var(--hijau-border);
+  color: var(--hijau-gelap);
+}
+.langkah span.aktif b {
+  background: var(--hijau);
+}
+
+.unggah-area {
+  border: 2px dashed var(--line-2);
+  border-radius: 18px;
+  padding: 40px 24px;
+  text-align: center;
+  background: var(--krem);
+  transition: all 0.2s ease;
+}
+.unggah-area:hover {
+  border-color: var(--hijau);
+  background: var(--hijau-soft);
+}
+
+.unggah-ikon {
+  color: var(--hijau-tua);
+  margin-bottom: 12px;
+}
+
+.filepick {
+  display: inline-block;
+  padding: 10px 22px;
+  background: var(--hijau);
+  color: #FFFFFF;
+  border-radius: var(--r-sm);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin: 14px 0 8px;
+  box-shadow: var(--shadow-green);
+  transition: all 0.15s ease;
+}
+.filepick:hover {
+  background: var(--hijau-tua);
+  transform: translateY(-1.5px);
+}
+
+/* ── Dashboard Activity & Performance Rows ───────────────────────── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 21px 0;
+  border-bottom: 1px solid var(--line);
+}
+.list-item:last-child {
+  border-bottom: none;
+  padding-bottom: 4px;
+}
+/* Hanya label langsung; teks di dalam baris memakai utilitas .small/.muted. */
+.list-item > span {
+  font-weight: 600;
+  color: var(--teks);
+  font-size: 0.9rem;
+}
+/* Ritme di dalam satu baris: pertanyaan dan sumber tidak lagi menempel. */
+.list-item b {
+  display: block;
+  font-weight: 600;
+  line-height: 1.62;
+  letter-spacing: -0.003em;
+}
+.list-item b + p {
+  margin: 8px 0 0;
+}
+.list-item p.small {
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+
+/* ── Modal Dialog (.modal) ───────────────────────────────────────── */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  place-items: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.modal.open {
+  display: grid;
+  animation: fadeIn 0.2s var(--ease);
+}
+
+.modal-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 28px 32px;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  animation: scaleIn 0.25s var(--ease-spring);
+}
+
+.modal-card h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--teks);
+  margin: 12px 0 16px;
+}
+
+/* ── Toast Notification (#toast.toast) ───────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 2000;
+  background: #0F172A;
+  color: #F8FAFC;
+  padding: 12px 24px;
+  border-radius: var(--r-pill);
+  font-size: 0.88rem;
+  font-weight: 650;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px);
+  transition: all 0.25s var(--ease-spring);
+}
+
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .card.chat { height: calc(100dvh - 64px - 100px); }
+  .bubble { max-width: 90%; }
+  .pilih-kartu { grid-template-columns: 1fr; }
+  .toast { bottom: 84px; right: 16px; left: 16px; text-align: center; }
+  .modal-card { padding: 20px 22px; }
+}
+
+
+/* Student trial sign-in and teacher score summary */
+.trial-login {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--krem);
+}
+.trial-login-head { display: flex; flex-direction: column; gap: 2px; }
+.trial-login label { font-size: .85rem; font-weight: 700; }
+.rekap-filter { margin-bottom: 16px; }
+.table-wrap { width: 100%; overflow-x: auto; }
+.table-rekap { width: 100%; border-collapse: collapse; min-width: 720px; font-size: .9rem; }
+.table-rekap th, .table-rekap td { padding: 11px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+.table-rekap th { background: var(--krem-2); color: var(--teks-2); font-weight: 700; white-space: nowrap; }
+.table-rekap td:last-child { font-weight: 800; }
+.table-rekap .nilai-baik { color: #059669; }
+.table-rekap .nilai-perlu { color: #d97706; }
+
+/* Baris statistik (label + angka) yang sebelumnya menempel tanpa jarak. */
+.stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.stat > span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--teks-2);
+  min-width: 0;
+}
+.stat > b {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+/* Mode gelap: kartu pilih materi (sebelumnya latar putih pucat & teks hilang). */
+body[data-theme="dark"] .pilih-kartu button,
+body[data-theme="dark"] .pilih-kartu button.sudah-selesai {
+  background: #16211E;
+  border-color: var(--line);
+  box-shadow: none;
+}
+body[data-theme="dark"] .pilih-kartu button.sudah-selesai:hover {
+  border-color: var(--hijau-border);
+  box-shadow: 0 6px 18px -6px rgba(16, 185, 129, 0.35);
+}
+body[data-theme="dark"] .pilih-kartu button b {
+  color: var(--teks);
+}
+body[data-theme="dark"] .pilih-kartu button .pk-aksi.selesai {
+  background: #12332A;
+  color: #6EE7B7;
+  border-color: #27604F;
+}
+body[data-theme="dark"] .pilih-kartu button .tag.mapel {
+  background: rgba(var(--ma, 16, 185, 129), 0.16);
+  border-color: rgba(var(--ma, 16, 185, 129), 0.4);
+  color: rgb(var(--ma, 16, 185, 129));
+}
+
+/* Nomor langkah: kontras cukup untuk teks putih. */
+.langkah span b {
+  background: var(--muted);
+}
+.langkah span.aktif b {
+  background: var(--hijau-tua);
+}
+body[data-theme="dark"] .langkah span {
+  background: #16211E;
+  border-color: var(--line);
+  color: var(--teks-2);
+}
+body[data-theme="dark"] .langkah span b {
+  background: #33463F;
+  color: #E7F0EC;
+}
+body[data-theme="dark"] .langkah span.aktif {
+  background: #12332A;
+  border-color: #2F7A63;
+  color: #A7F3D0;
+}
+body[data-theme="dark"] .langkah span.aktif b {
+  background: var(--hijau);
+  color: #04120D;
+}
+/* Chip tingkat yang aktif: teks gelap di atas hijau supaya terbaca. */
+.chipkelas[aria-pressed="true"] {
+  color: #04120D;
+}
+
+/* ── Kontras label kecil & ikon navigasi ─────────────────────────── */
+.sidebar .nav-judul {
+  color: var(--muted);
+}
+.footer-note {
+  color: var(--muted);
+}
+.mapel-ikon {
+  color: var(--hijau-tua);
+}
+body[data-theme="dark"] .sidebar .nav-judul {
+  color: #8FA6A0;
+}
+body[data-theme="dark"] .footer-note {
+  color: #8FA6A0;
+}
+body[data-theme="dark"] .sidebar .nav button {
+  color: #CFDDD8;
+}
+body[data-theme="dark"] .sidebar .nav button svg {
+  color: #8FA6A0;
+}
+body[data-theme="dark"] .sidebar .nav button:hover {
+  background: #1B2A25;
+  color: #A7F3D0;
+}
+body[data-theme="dark"] .sidebar .nav button:hover svg {
+  color: #6EE7B7;
+}
+body[data-theme="dark"] .sidebar .nav button.active svg,
+body[data-theme="dark"] .sidebar .nav button[aria-current="page"] svg {
+  color: #6EE7B7;
+}
+body[data-theme="dark"] .mapel-ikon {
+  background: #12332A;
+  color: #6EE7B7;
+}
+
+/* Hero sapaan: versi gelap yang senada, bukan kartu mint terang. */
+body[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, #12332A 0%, #0F2A23 55%, #16211E 100%);
+  border-color: #2F7A63;
+  box-shadow: none;
+}
+body[data-theme="dark"] .hero h1 {
+  color: #ECFDF5;
+}
+body[data-theme="dark"] .hero .muted {
+  color: #A7F3D0;
+}
+body[data-theme="dark"] .hero .muted b,
+body[data-theme="dark"] #labelKelasChat {
+  color: #6EE7B7;
+}
+body[data-theme="dark"] .hero-tanda {
+  background: #0E2A22;
+  border-color: #2F7A63;
+  color: #6EE7B7;
+  box-shadow: none;
+}
+body[data-theme="dark"] .sumber {
+  color: #6EE7B7;
+}
+body[data-theme="dark"] .bubble.bot {
+  background: #16211E;
+}
+
+/* ── Latihan: pertanyaan & pilihan jawaban lebih lega ────────────── */
+.quiz-question {
+  margin-bottom: 32px;
+}
+.quiz-question legend {
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  max-width: 70ch;
+}
+.opsi {
+  margin-bottom: 12px;
+  padding: 15px 18px;
+  line-height: 1.5;
+}
+.quiz-actions {
+  margin-top: 12px;
+  gap: 14px;
+}
+
+/* ── Chat: tiga titik bergelombang saat menyusun jawaban ─────────── */
+.bubble.bot.mengetik {
+  display: inline-flex;
+  gap: 7px;
+  padding: 16px 20px;
+  min-width: 92px;
+}
+.bubble.bot.mengetik i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--hijau);
+  opacity: 0.45;
+  animation: gelombangTitik 1.15s infinite ease-in-out;
+}
+.bubble.bot.mengetik i:nth-child(2) {
+  animation-delay: 0.16s;
+}
+.bubble.bot.mengetik i:nth-child(3) {
+  animation-delay: 0.32s;
+}
+@keyframes gelombangTitik {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0) scale(0.85);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-5px) scale(1);
+    opacity: 1;
+  }
+}
+body[data-theme="dark"] .bubble.bot.mengetik i {
+  background: #6EE7B7;
+}
+
+/* ── Pencarian materi siswa: ritme label dan kolom ───────────────── */
+.library-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+.library-tools label {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: var(--teks-2);
+}
+.library-tools label:first-child {
+  margin-top: 0;
+}
+.library-tools #jumlahMateriSiswa {
+  margin: 8px 0 0;
+}
+
+/* ── Tabel riwayat & rekap: kolom rapi, tidak berdesakan ─────────── */
+.table-rekap {
+  font-size: 0.875rem;
+}
+.table-rekap th,
+.table-rekap td {
+  padding: 14px 16px;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.table-rekap th {
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+.table-rekap th:first-child,
+.table-rekap td:first-child {
+  width: 96px;
+  white-space: nowrap;
+}
+.table-rekap th:nth-child(2),
+.table-rekap td:nth-child(2) {
+  width: 104px;
+  white-space: nowrap;
+}
+.table-rekap th:nth-child(3) {
+  width: 30%;
+  min-width: 150px;
+}
+.table-rekap tbody tr:hover td {
+  background: var(--hijau-soft);
+}
+body[data-theme="dark"] .table-rekap tbody tr:hover td {
+  background: #1B2A25;
+}
+
+/* ── Tabel riwayat (.table): sebelumnya tanpa gaya sama sekali ───── */
+#tabelRiwayat .table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.875rem;
+}
+#tabelRiwayat .table th,
+#tabelRiwayat .table td {
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.55;
+  border-bottom: 1px solid var(--line);
+}
+#tabelRiwayat .table th {
+  background: var(--krem-2);
+  color: var(--teks-2);
+  font-weight: 650;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+#tabelRiwayat .table th:nth-child(1),
+#tabelRiwayat .table td:nth-child(1) {
+  width: 116px;
+  white-space: nowrap;
+  color: var(--muted);
+}
+#tabelRiwayat .table th:nth-child(2),
+#tabelRiwayat .table td:nth-child(2) {
+  width: 104px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+#tabelRiwayat .table th:nth-child(3),
+#tabelRiwayat .table td:nth-child(3) {
+  width: 30%;
+}
+#tabelRiwayat .table tbody tr:hover td {
+  background: var(--hijau-soft);
+}
+body[data-theme="dark"] #tabelRiwayat .table th {
+  background: #1C2A26;
+  color: #CFDDD8;
+}
+body[data-theme="dark"] #tabelRiwayat .table tbody tr:hover td {
+  background: #1B2A25;
+}
+
+/* Baris aktivitas: judul boleh memendek, keterangan waktu jangan pecah. */
+.list-item > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.list-item > small.muted,
+.list-item > span.small {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  text-align: right;
+  font-size: 0.78rem;
+}
+
+/* ── Kartu materi siswa: ritme isi tidak menempel ────────────────── */
+.card.materi {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.card.materi .baris {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.card.materi h3 {
+  margin: 0;
+  line-height: 1.45;
+}
+.card.materi p,
+.card.materi .muted {
+  margin: 0;
+}
+.card.materi .btnrow {
+  gap: 10px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+/* Dua aksi di kartu materi: bertumpuk rapi, bukan meluber */
+.card.materi .btnrow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.card.materi .btnrow .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ── Pembahasan & kunci jawaban: tiap soal jadi blok sendiri ────── */
+.pembahasan-item {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.pembahasan-item:first-child {
+  padding-top: 6px;
+}
+.pembahasan-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 6px;
+}
+.pembahasan-item h3 {
+  font-size: 0.95rem;
+  font-weight: 650;
+  line-height: 1.68;
+  color: var(--teks);
+  margin: 0 0 12px;
+  max-width: 78ch;
+}
+.pembahasan-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+}
+.pembahasan-status.ok {
+  background: var(--hijau-soft);
+  border-color: var(--hijau-border);
+  color: var(--hijau-gelap);
+}
+.pembahasan-status.ok::before {
+  content: "✓";
+}
+.pembahasan-status.salah {
+  background: #FEF2F2;
+  border-color: #FECACA;
+  color: #B91C1C;
+}
+.pembahasan-status.salah::before {
+  content: "✗";
+}
+.pembahasan-status.kosong {
+  background: var(--krem-2);
+  border-color: var(--line);
+  color: var(--muted);
+}
+.pembahasan-kunci,
+.pembahasan-jawab {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0 0 10px;
+  color: var(--teks-2);
+}
+.pembahasan-kunci b {
+  color: var(--hijau-gelap);
+  font-weight: 700;
+}
+.pembahasan-teks {
+  font-size: 0.875rem;
+  line-height: 1.75;
+  margin: 0;
+  color: var(--muted);
+  max-width: 80ch;
+}
+body[data-theme="dark"] .pembahasan-status.ok {
+  background: #12332A;
+  border-color: #2F7A63;
+  color: #A7F3D0;
+}
+body[data-theme="dark"] .pembahasan-status.salah {
+  background: #3A2029;
+  border-color: #6D3542;
+  color: #FCA5A5;
+}
+body[data-theme="dark"] .pembahasan-status.kosong {
+  background: #1B2A25;
+  border-color: var(--line-2);
+  color: #A7B5AF;
+}
+body[data-theme="dark"] .pembahasan-kunci b {
+  color: #6EE7B7;
+}
+body[data-theme="dark"] .pembahasan-teks {
+  color: #A7B5AF;
+}
+
+/* ── Chat: isi balon & area ketik lebih lapang ───────────────────── */
+.bubble {
+  max-width: min(76%, 68ch);
+  padding: 16px 20px;
+  line-height: 1.68;
+}
+.bubble.bot .sumber {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  line-height: 1.5;
+}
+.bubble .btn.small {
+  margin-top: 10px;
+}
+#chipCepat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 24px 2px;
+}
+.chat-status {
+  padding: 8px 24px 10px;
+  line-height: 1.5;
+}
+.chatbox {
+  padding: 12px 20px 18px;
+}
+body[data-theme="dark"] .bubble.bot .sumber {
+  border-top-color: var(--line);
+}
+
+/* ── Halaman baca materi: lebar baca & ritme paragraf ────────────── */
+.reading-page {
+  padding: 36px 40px;
+}
+.reading-page header {
+  margin-bottom: 24px;
+}
+.reading-page header h1 {
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+.reading-content {
+  max-width: 72ch;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--teks-2);
+}
+.reading-content p {
+  margin: 0 0 14px;
+}
+.reading-content p:last-child {
+  margin-bottom: 0;
+}
+.reading-actions {
+  margin-top: 30px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .reading-page {
+    padding: 24px 20px;
+  }
+  .reading-content {
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+}
+
+/* ── Modal: bentuk panjang tetap bisa menyimpan tanpa scroll buta ── */
+.modal-card {
+  max-height: 90vh;
+}
+.modal-card #modalIsi > form > .btnrow:last-child,
+.modal-card #modalIsi > .btnrow:last-child {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  margin-top: 14px;
+  padding: 14px 0 6px;
+  background: var(--putih);
+  border-top: 1px solid var(--line);
+}
+
+/* Modal panjang: bisa digulir, bilah gulir terlihat. */
+.modal-card {
+  max-height: 90vh;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+
+/* Tabel rekap di HP: jangan melebar keluar layar. */
+@media (max-width: 760px) {
+  .table-rekap {
+    min-width: 0;
+    font-size: 0.82rem;
+  }
+  .table-rekap th,
+  .table-rekap td {
+    padding: 10px 8px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Riwayat di HP: tabel bergulir sendiri, halaman tidak ikut melebar. */
+@media (max-width: 760px) {
+  #tabelRiwayat {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #tabelRiwayat .table {
+    min-width: 460px;
+  }
+}
+
+/* Jangan pecah nama kelas di tengah ("VIII C"). */
+.hero p b,
+.hero p strong {
+  white-space: nowrap;
+}
+
+/* Gelembung chat di HP: pakai lebar layar, jangan sempit. */
+@media (max-width: 640px) {
+  .bubble {
+    max-width: 88%;
+    padding: 14px;
+  }
+  .bubble .sumber {
+    font-size: 0.8rem;
+  }
+}
+
+/* ── Penilaian esai (guru) ───────────────────────────────────────── */
+#panelEsai .kartu-judul {
+  align-items: flex-start;
+  gap: 14px;
+}
+.esai-kartu {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-top: 14px;
+  background: var(--putih);
+}
+.esai-kepala {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.esai-kepala p {
+  margin-top: 4px;
+}
+.esai-soal {
+  padding: 16px 0 6px;
+  border-bottom: 1px dashed var(--line);
+}
+.esai-soal:last-of-type {
+  border-bottom: 0;
+}
+.esai-tanya {
+  font-weight: 600;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.esai-label {
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.esai-jawab {
+  line-height: 1.7;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
+.esai-kunci {
+  margin: 6px 0 12px;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.esai-kunci summary {
+  cursor: pointer;
+  color: var(--hijau-tua);
+  font-weight: 600;
+}
+.esai-kunci p {
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.esai-nilai {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.esai-nilai input {
+  width: 92px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font: inherit;
+  text-align: center;
+}
+.esai-nilai input.salah {
+  border-color: #dc2626;
+}
+.esai-aksi {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+body[data-theme="dark"] .esai-kartu {
+  background: #16211e;
+}
+
+/* ── Gambar materi ───────────────────────────────────────────────── */
+.gambar-materi {
+  margin: 22px 0 6px;
+  text-align: center;
+}
+.gambar-materi img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--putih);
+}
+.gambar-materi figcaption {
+  margin-top: 10px;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 60ch;
+  margin-inline: auto;
+}
+.galeri-materi {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+.galeri-item {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  margin: 0;
+}
+.galeri-item img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: var(--hijau-soft);
+}
+.galeri-item figcaption {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 10px 0;
+}
+.galeri-item .btn {
+  margin-top: 2px;
+}
+body[data-theme="dark"] .galeri-item img {
+  background: #10201b;
+}
+
+/* Unggah gambar: input asli disembunyikan, label menjadi tombol */
+label.btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-self: flex-start;
+  width: auto;
+}
+label.btn input[type="file"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.tag-baru {
+  background: var(--hijau);
+  color: #fff;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.wa-kartu {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--hijau-border);
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--hijau-soft) 0%, var(--putih) 78%);
+}
+
+.wa-logo {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #25D366;
+  color: #FFFFFF;
+  box-shadow: 0 6px 14px -6px rgba(37, 211, 102, 0.75);
+}
+
+.wa-logo svg {
+  width: 25px;
+  height: 25px;
+}
+
+.wa-isi {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.wa-isi b {
+  font-size: 0.9rem;
+  color: var(--teks);
+}
+
+.wa-nomor {
+  font-size: 1.04rem;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+  color: var(--hijau-gelap);
+}
+
+body[data-theme="dark"] .wa-nomor {
+  color: #6EE7B7;
+}
+
+/* ── Ruang admin: daftar akun ────────────────────────────────────── */
+.admin-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px auto;
+  align-items: end;
+  gap: 14px;
+  margin: 0 0 18px;
+}
+.admin-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+.admin-filters input,
+.admin-filters select {
+  min-height: 44px;
+  border-radius: 11px;
+  padding: 0 14px;
+}
+.admin-filters .btn {
+  min-height: 44px;
+  padding: 0 20px;
+}
+#adminCount {
+  margin: 0 0 14px;
+}
+#adminDaftar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.admin-account {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--putih);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.admin-account:hover {
+  border-color: var(--line-2);
+  box-shadow: 0 14px 30px -26px rgba(9, 38, 30, 0.55);
+}
+.admin-account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.admin-account-info h3 {
+  margin: 0 0 2px;
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.012em;
+  line-height: 1.4;
+}
+.admin-account-info p {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.62;
+}
+.admin-account-info .btnrow {
+  margin: 11px 0 0;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.admin-account-info .tag {
+  font-size: 0.72rem;
+  padding: 3px 9px;
+}
+.admin-account > .btnrow {
+  margin: 2px 0 0;
+  flex: 0 0 auto;
+  gap: 9px;
+  align-items: center;
+}
+.admin-account > .btnrow .btn {
+  min-height: 38px;
+  padding: 0 15px;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .admin-filters {
+    grid-template-columns: 1fr;
+  }
+  .admin-account {
+    flex-direction: column;
+    gap: 16px;
+    padding: 18px;
+  }
+  .admin-account > .btnrow {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}

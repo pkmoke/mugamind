@@ -1,0 +1,2066 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width,initial-scale=1,interactive-widget=resizes-content"
+      name="viewport"
+    />
+    <title>MugaMind — Chatbot Pembelajaran SMP Muhammadiyah</title>
+    <link href="src/styles/dasar.css?v=20261109z" rel="stylesheet" />
+    <link href="src/styles/tata-letak.css?v=20261109z" rel="stylesheet" />
+    <link href="src/styles/halaman.css?v=20261109z" rel="stylesheet" />
+    <link href="src/styles/animasi.css?v=20261109z" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="bar-muat" id="barMuat" aria-hidden="true"></div>
+    <a class="skip-link" href="#mainContent">Langsung ke isi halaman</a>
+    <div class="login" id="loginView">
+      <div aria-hidden="true" class="login-latar"></div>
+      <div aria-hidden="true" class="login-tirai"></div>
+      <div class="login-card">
+        <div class="login-brand">
+          <div class="brand">
+            <div class="brand-bot">
+              <img
+                alt="Logo Muhammadiyah"
+                class="brand-logo"
+                src="assets/logo-96.webp" width="32" height="32" alt="" decoding="async"
+              />
+            </div>
+            MugaMind
+          </div>
+          <h1>Belajar lebih paham, selangkah demi selangkah.</h1>
+          <p class="login-lead">
+            Temukan materi kelasmu, tanyakan yang belum dipahami, dan latih
+            kemampuanmu bersama MugaMind.
+          </p>
+          <p class="small login-catatan">
+            Ruang belajar siswa dan guru · SMP Muhammadiyah 3 Ciledug
+          </p>
+        </div>
+        <form class="login-form" id="formLogin">
+          <h2>Selamat datang kembali</h2>
+          <p class="muted small">
+            Gunakan akun sekolah untuk melanjutkan belajar.
+          </p>
+          <div class="bidang">
+            <label for="loginUser">Email / NIS</label>
+            <input
+              autocomplete="username"
+              id="loginUser"
+              maxlength="255"
+              placeholder="Email atau nomor induk siswa"
+              required=""
+            />
+          </div>
+          <div class="bidang">
+            <label for="loginPass">Kata sandi</label>
+            <input
+              autocomplete="current-password"
+              id="loginPass"
+              maxlength="256"
+              placeholder="Masukkan kata sandi"
+              required=""
+              type="password"
+            />
+          </div>
+          <p class="form-error" hidden="" id="loginError" role="alert"></p>
+          <button class="btn primary lebar" data-act="masuk" type="submit">
+            Masuk
+          </button>
+          <button class="tautan-bantuan" data-act="bukaBantuan" type="button">
+            Lupa kata sandi? Hubungi admin sekolah
+          </button>
+          <div class="notice catatan-demo">
+            Kelas dan akses materi mengikuti akun sekolahmu. Hubungi pengelola
+            sekolah jika belum memiliki akun.
+          </div>
+          <div class="trial-login" hidden>
+            <div class="trial-login-head">
+              <b>Masuk sebagai siswa uji coba</b>
+              <span class="small muted">Untuk demonstrasi aplikasi</span>
+            </div>
+            <label for="trialNama">Nama siswa</label>
+            <input id="trialNama" maxlength="100" placeholder="Masukkan nama" autocomplete="name" />
+            <div class="formgrid">
+              <div>
+                <label for="trialTingkat">Kelas</label>
+                <select id="trialTingkat">
+                  <option value="VII">VII</option>
+                  <option value="VIII">VIII</option>
+                  <option value="IX">IX</option>
+                </select>
+              </div>
+              <div>
+                <label for="trialRombel">Rombel</label>
+                <select id="trialRombel">
+                  <option value="A">A</option><option value="B">B</option>
+                  <option value="C">C</option><option value="D">D</option>
+                  <option value="E">E</option><option value="F">F</option>
+                </select>
+              </div>
+            </div>
+            <p class="small muted">Akun uji coba otomatis berakhir setelah 24 jam. Fitur ini harus diaktifkan oleh pengelola.</p>
+            <button class="btn ghost lebar" data-act="masukUjiCoba" type="button">Mulai uji coba siswa</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="app" id="appView" style="display: none">
+      <div class="overlay" data-act="tutupSidebar" id="overlay"></div>
+      <aside class="sidebar" id="sidebar">
+        <button
+          aria-label="Tutup menu"
+          class="sidebar-close icon-button"
+          data-act="tutupSidebar"
+        >
+          ×
+        </button>
+        <div class="brand">
+          <div class="brand-bot">
+            <img
+              alt="Logo Muhammadiyah"
+              class="brand-logo"
+              src="assets/logo-96.webp" width="32" height="32" alt="" decoding="async"
+            />
+          </div>
+          MugaMind
+        </div>
+        <div class="role" id="roleLabel">Mode Siswa</div>
+        <nav aria-label="Menu siswa" class="nav" id="navStudent">
+          <i class="nav-glow"></i>
+          <div class="nav-grup">
+            <span class="nav-judul">Belajar</span>
+            <button class="active" data-act="bukaHalaman" data-page="s-chat">
+              <svg
+                fill="none"
+                height="17"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                viewbox="0 0 24 24"
+                width="17"
+              >
+                <path
+                  d="M21 12a8 8 0 0 1-8 8H8l-4 3v-6.5A8 8 0 0 1 12 4h1a8 8 0 0 1 8 8Z"
+                ></path></svg
+              ><span>Tanya MugaMind</span>
+            </button>
+            <button data-act="bukaHalaman" data-page="s-materi">
+              <svg
+                fill="none"
+                height="17"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                viewbox="0 0 24 24"
+                width="17"
+              >
+                <path
+                  d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5Z"
+                ></path>
+                <path d="M4 5.5v15"></path></svg
+              ><span>Materi</span>
+            </button>
+            <button data-act="bukaHalaman" data-page="s-latihan">
+              <svg
+                fill="none"
+                height="17"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                viewbox="0 0 24 24"
+                width="17"
+              >
+                <path d="M5 4h11l3 3v13H5z"></path>
+                <path d="M15 8h4M15 4v4"></path>
+                <path d="M8.5 13.5l1.8 1.8 3.4-3.6"></path></svg
+              ><span>Latihan</span>
+            </button>
+          </div>
+          <div class="nav-grup">
+            <span class="nav-judul">Progresku</span>
+            <button data-act="bukaHalaman" data-page="s-riwayat">
+              <svg
+                fill="none"
+                height="17"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                viewbox="0 0 24 24"
+                width="17"
+              >
+                <circle cx="12" cy="12" r="8.5"></circle>
+                <path d="M12 7.6V12l3 2"></path></svg
+              ><span>Riwayat</span>
+            </button>
+          </div>
+        </nav>
+        <nav
+          aria-label="Menu guru"
+          class="nav"
+          id="navTeacher"
+          style="display: none"
+        >
+          <i class="nav-glow"></i>
+          <div class="nav-grup">
+            <span class="nav-judul">Pantau</span>
+            <button
+              class="active"
+              data-act="bukaHalaman"
+              data-page="t-dashboard"
+            >
+              <svg
+                fill="none"
+                height="17"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                viewbox="0 0 24 24"
+                width="17"
+              >
+                <path
+                  d="M4 4h6.5v6.5H4zM13.5 4H20v4h-6.5zM13.5 10.5H20V20h-6.5zM4 13h6.5v7H4z"
+                ></path></svg
+              ><span>Dashboard</span>
+            </button>
+            <button data-act="bukaHalaman" data-page="t-analisis">
+              <svg
+                fill="none"
+                height="17"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                viewbox="0 0 24 24"
+                width="17"
+              >
+                <path d="M4 20h16"></path>
+                <path d="M7 20v-8M12 20V5M17 20v-5"></path></svg
+              ><span>Hasil belajar</span>
+            </button>
+          </div>
+          <div class="nav-grup">
+            <span class="nav-judul">Kelola</span>
+            <button data-act="bukaHalaman" data-page="t-materi">
+              <svg
+                fill="none"
+                height="17"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                viewbox="0 0 24 24"
+                width="17"
+              >
+                <path
+                  d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5Z"
+                ></path>
+                <path d="M4 5.5v15"></path></svg
+              ><span>Kelola Materi</span>
+            </button>
+            <button data-act="bukaHalaman" data-page="t-soal">
+              <svg
+                fill="none"
+                height="17"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                viewbox="0 0 24 24"
+                width="17"
+              >
+                <path d="M5 4h11l3 3v13H5z"></path>
+                <path d="M15 8h4M15 4v4"></path>
+                <path d="M8.5 13.5l1.8 1.8 3.4-3.6"></path></svg
+              ><span>Kelola Soal</span>
+            </button>
+            <button data-act="bukaHalaman" data-page="t-upload">
+              <svg
+                fill="none"
+                height="17"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                viewbox="0 0 24 24"
+                width="17"
+              >
+                <path d="M12 16V5"></path>
+                <path d="M8 9l4-4 4 4"></path>
+                <path
+                  d="M4 15.5V18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"
+                ></path></svg
+              ><span>Unggah materi</span>
+            </button>
+          </div>
+        </nav>
+        <nav class="nav" id="navAdmin" hidden aria-label="Menu administrator">
+          <div class="nav-judul">ADMINISTRASI</div>
+          <button data-act="bukaHalaman" data-page="a-akun">
+            <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="18">
+              <circle cx="9" cy="8" r="3.4"></circle>
+              <path d="M3.2 20a5.8 5.8 0 0 1 11.6 0"></path>
+              <path d="M16.5 5.2a3.2 3.2 0 0 1 0 6"></path>
+              <path d="M18 14.4a5.2 5.2 0 0 1 3 4.7"></path>
+            </svg>
+            <span>Akun &amp; penugasan</span>
+          </button>
+          <button data-act="bukaHalaman" data-page="a-audit">
+            <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="18">
+              <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"></path>
+              <path d="M3.5 4.5V10h5.4"></path>
+              <path d="M12 7.5V12l3 1.8"></path>
+            </svg>
+            <span>Log perubahan</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-foot">
+          <button class="btn ghost lebar" data-act="bukaBantuan">Bantuan &amp; Customer Service</button>
+          <button class="btn ghost lebar" data-act="catatanTeknis">
+            <svg
+              fill="none"
+              height="15"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="15"
+            >
+              <circle cx="12" cy="12" r="8.5"></circle>
+              <path d="M12 11.2v5M12 8h.01"></path></svg
+            ><span>Tentang MugaMind</span>
+          </button>
+          <button class="btn ghost lebar" data-act="keluar">
+            <svg
+              fill="none"
+              height="15"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="15"
+            >
+              <path
+                d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H15"
+              ></path>
+              <path d="M10 8 6 12l4 4M6 12h9"></path></svg
+            ><span>Keluar</span></button
+          ><button class="btn ghost lebar" data-act="ubahSandi">
+            Ubah kata sandi
+          </button>
+        </div>
+      </aside>
+      <main class="main">
+        <header class="topbar">
+          <button
+            aria-controls="sidebar"
+            aria-expanded="false"
+            aria-label="Buka menu"
+            class="hamburger"
+            data-act="bukaSidebar"
+          >
+            <span></span><span></span><span></span>
+          </button>
+          <div class="top-title" id="topTitle">MugaMind</div>
+          <div class="konteks-guru" hidden="" id="konteksGuru">
+            <label class="sr-only" for="kelasAktif">Mapel dan kelas aktif</label
+            ><select
+              aria-label="Mapel dan kelas aktif"
+              id="kelasAktif"
+            ></select>
+          </div>
+          <div class="user-chip">
+            <button
+              class="tema-toggle"
+              data-act="toggleTheme"
+              id="themeToggle"
+              type="button"
+              aria-label="Mode gelap"
+              aria-pressed="false"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <g class="ikon-bulan">
+                  <path class="bentuk" d="M20.4 14.2A8.4 8.4 0 0 1 9.8 3.6 8.6 8.6 0 1 0 20.4 14.2Z" />
+                </g>
+                <g class="ikon-matahari">
+                  <circle class="bentuk" cx="12" cy="12" r="3.9" />
+                  <g class="sinar">
+                    <path d="M12 3v2.4" /><path d="M12 18.6V21" />
+                    <path d="M3 12h2.4" /><path d="M18.6 12H21" />
+                    <path d="M5.6 5.6l1.7 1.7" /><path d="M16.7 16.7l1.7 1.7" />
+                    <path d="M18.4 5.6l-1.7 1.7" /><path d="M7.3 16.7l-1.7 1.7" />
+                  </g>
+                </g>
+              </svg>
+            </button>
+            <span class="tag" id="chipKelas">Kelas VIII</span
+            ><span id="userName">Andi</span>
+            <button
+              aria-controls="menuProfil"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Buka menu profil"
+              class="avatar"
+              data-act="bukaProfil"
+              id="userAvatar"
+              type="button"
+            >A</button>
+            <span aria-hidden="true" class="avatar-gelembung"></span>
+            <span aria-hidden="true" class="avatar-buih"
+              ><i></i><i></i><i></i><i></i><i></i><i></i
+            ></span>
+            <span aria-hidden="true" class="menu-halo"></span>
+            <div
+              aria-label="Menu profil"
+              class="menu-profil"
+              hidden
+              id="menuProfil"
+              role="menu"
+            >
+              <span aria-hidden="true" class="menu-kilau"></span>
+              <div class="menu-kepala">
+                <span class="menu-avatar" id="userAvatarMenu">A</span>
+                <span class="menu-identitas">
+                  <b id="userNamaMenu">Andi</b>
+                  <span class="small muted" id="userPeranMenu">Siswa</span>
+                </span>
+              </div>
+              <button
+                class="menu-baris"
+                data-act="bukaBantuan"
+                role="menuitem"
+                style="--i: 1"
+                type="button"
+              >
+                <span aria-hidden="true" class="menu-ikon menu-ikon-wa">
+                  <svg
+                    fill="currentColor"
+                    focusable="false"
+                    viewbox="0 0 24 24"
+                  >
+                    <path
+                      d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.18-.3-.02-.46.13-.6.13-.14.3-.35.45-.53.15-.17.2-.3.3-.5.1-.19.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.87 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.7.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.89-9.88 9.89m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.9c0 2.09.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4"
+                    ></path></svg
+                ></span>
+                <span class="menu-teks"
+                  ><b>Pusat bantuan</b
+                  ><span class="small muted">Chat customer service</span></span
+                >
+              </button>
+              <button
+                class="menu-baris"
+                data-act="ubahSandi"
+                role="menuitem"
+                style="--i: 2"
+                type="button"
+              >
+                <span aria-hidden="true" class="menu-ikon">
+                  <svg
+                    fill="none"
+                    focusable="false"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.7"
+                    viewbox="0 0 24 24"
+                  >
+                    <rect height="9.5" rx="2.6" width="15" x="4.5" y="10.5"></rect>
+                    <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path></svg
+                ></span>
+                <span class="menu-teks"><b>Ubah kata sandi</b></span>
+              </button>
+              <button
+                class="menu-baris"
+                data-act="keluar"
+                role="menuitem"
+                style="--i: 3"
+                type="button"
+              >
+                <span aria-hidden="true" class="menu-ikon">
+                  <svg
+                    fill="none"
+                    focusable="false"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.7"
+                    viewbox="0 0 24 24"
+                  >
+                    <path
+                      d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H15"
+                    ></path>
+                    <path d="M10 8 6 12l4 4M6 12h9"></path></svg
+                ></span>
+                <span class="menu-teks"><b>Keluar</b></span>
+              </button>
+            </div>
+          </div>
+        </header>
+        <section class="content" id="mainContent" tabindex="-1">
+          <div
+            class="notice error-banner"
+            hidden=""
+            id="pageError"
+            role="alert"
+          ></div>
+          <div class="page active" id="s-chat">
+            <div class="hero">
+              <div>
+                <h1>Halo, <span id="sapaanNama">Andi</span></h1>
+                <p class="muted">
+                  Apa yang ingin kamu pahami dari
+                  <b id="labelKelasChat">materi kelasmu</b> hari ini?
+                </p>
+              </div>
+              <div aria-hidden="true" class="hero-tanda">
+                <svg
+                  fill="none"
+                  height="26"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  viewbox="0 0 24 24"
+                  width="26"
+                >
+                  <path
+                    d="M21 12a8 8 0 0 1-8 8H8l-4 3v-6.5A8 8 0 0 1 12 4h1a8 8 0 0 1 8 8Z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="card chat">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <span class="kartu-judul-ikon"
+                    ><svg
+                      fill="none"
+                      height="19"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.9"
+                      viewbox="0 0 24 24"
+                      width="19"
+                    >
+                      <path
+                        d="M21 12a8 8 0 0 1-8 8H8l-4 3v-6.5A8 8 0 0 1 12 4h1a8 8 0 0 1 8 8Z"
+                      ></path></svg
+                  ></span>
+                  <div>
+                    <h2>Tanya MugaMind</h2>
+                    <p class="small muted">
+                      Jawaban dilengkapi sumber dari materi kelasmu.
+                    </p>
+                  </div>
+                </div>
+                <span class="tag green">Materi sekolah</span>
+              </div>
+              <div
+                aria-label="Percakapan dengan MugaMind"
+                class="messages"
+                id="messages"
+                role="log"
+              >
+              </div>
+              <div class="btnrow" id="chipCepat"></div>
+              <div
+                aria-live="polite"
+                class="chat-status"
+                id="chatStatus"
+                role="status"
+              ></div>
+              <div class="chatbox">
+                <textarea
+                  aria-label="Pertanyaan untuk MugaMind"
+                  id="chatInput"
+                  maxlength="2000"
+                  placeholder="Tulis pertanyaan…"
+                  rows="1"
+                ></textarea>
+                <button class="btn primary" data-act="kirimChat">Kirim</button>
+              </div>
+            </div>
+          </div>
+          <div class="page" id="s-materi">
+            <div class="kepala">
+              <div>
+                <h1>Materi Pembelajaran</h1>
+                <p class="muted">
+                  Materi <b id="labelKelasSiswa">Kelas VIII</b> — diisi guru,
+                  langsung muncul di sini dan jadi sumber jawaban chatbot.
+                </p>
+              </div>
+            </div>
+            <section class="card library-tools" aria-label="Cari materi">
+              <label for="cariMateriSiswa">Cari materi</label>
+              <input
+                id="cariMateriSiswa"
+                type="search"
+                placeholder="Cari judul atau isi materi…"
+              />
+              <label for="filterMapelSiswa">Mata pelajaran</label>
+              <select id="filterMapelSiswa">
+                <option value="">Semua mata pelajaran</option>
+              </select>
+              <p id="jumlahMateriSiswa" class="small muted" role="status"></p>
+            </section>
+            <div id="lanjutBelajar" class="card" hidden></div>
+            <div class="grid g3" id="daftarMateriSiswa"></div>
+          </div>
+          <section class="page" id="s-baca">
+            <div class="kepala">
+              <button
+                class="btn ghost"
+                data-act="bukaHalaman"
+                data-page="s-materi"
+              >
+                ← Semua materi
+              </button>
+            </div>
+            <article class="card reading-page">
+              <header>
+                <p class="eyebrow" id="metaMateriBaca"></p>
+                <h1 id="judulMateriBaca">Baca materi</h1>
+                <p class="muted">
+                  Pelajari materinya dengan tenang, lalu coba latihan untuk
+                  menguji pemahamanmu.
+                </p>
+              </header>
+              <div class="reading-content" id="isiMateriBaca"></div>
+              <div class="btnrow reading-actions" id="aksiMateriBaca"></div>
+            </article>
+          </section>
+          <div class="page" id="s-latihan">
+            <div class="kepala">
+              <div>
+                <h1>Latihan Soal</h1>
+                <p class="muted">
+                  Pilih materi, kerjakan, lalu lihat nilai dan pembahasannya.
+                  Hasilnya otomatis terbaca guru.
+                </p>
+              </div>
+              <div class="kepala-aksi">
+                <span class="tag"
+                  >Kelas <b id="labelKelasLatihan">VIII</b></span
+                >
+              </div>
+            </div>
+            <div class="card" id="kartuPilihLatihan">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <span class="kartu-judul-ikon"
+                    ><svg
+                      fill="none"
+                      height="19"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.9"
+                      viewbox="0 0 24 24"
+                      width="19"
+                    >
+                      <path d="M5 4h11l3 3v13H5z"></path>
+                      <path d="M15 8h4M15 4v4"></path>
+                      <path d="M8.5 13.5l1.8 1.8 3.4-3.6"></path></svg
+                  ></span>
+                  <div>
+                    <h2>Pilih materi untuk dilatih</h2>
+                    <p class="small muted">
+                      Klik salah satu kartu — soalnya langsung terbuka.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="pilih-kartu" id="pilihLatihanCepat"></div>
+              <div class="tersembunyi">
+                <label for="pilihMateriLatihan">Pilih materi</label>
+                <select id="pilihMateriLatihan"></select>
+                <button class="btn primary" data-act="mulaiLatihan">
+                  Mulai latihan
+                </button>
+              </div>
+            </div>
+            <div id="areaLatihan"></div>
+          </div>
+          <div class="page" id="s-rangkuman">
+            <div class="kepala">
+              <div>
+                <h1>Rangkuman Materi</h1>
+                <p class="muted">
+                  Pilih materi, lalu MugaMind menyusun poin-poin pentingnya untuk
+                  kamu.
+                </p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <span class="kartu-judul-ikon"
+                    ><svg
+                      fill="none"
+                      height="19"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.9"
+                      viewbox="0 0 24 24"
+                      width="19"
+                    >
+                      <path d="M5 6h14M5 12h14M5 18h8"></path></svg
+                  ></span>
+                  <div>
+                    <h2>Materi mana yang mau dirangkum?</h2>
+                    <p class="small muted">Klik salah satu kartu di bawah.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="pilih-kartu" id="pilihRangkumanCepat"></div>
+              <div class="tersembunyi">
+                <label for="pilihMateriRangkuman">Pilih materi</label>
+                <select id="pilihMateriRangkuman"></select>
+                <button class="btn emas" data-act="buatRangkuman">
+                  Buat rangkuman
+                </button>
+              </div>
+            </div>
+            <div id="areaRangkuman"></div>
+          </div>
+          <div class="page" id="s-riwayat">
+            <div class="kepala">
+              <div>
+                <h1>Riwayat Belajar</h1>
+                <p class="muted">
+                  Percakapan, latihan, dan rangkuman yang sudah kamu lakukan.
+                  Nilai tersimpan sampai 180 hari.
+                </p>
+              </div>
+            </div>
+            <div class="kerangka-halaman">
+              <div class="grid g4">
+                <div class="kotak"></div>
+                <div class="kotak"></div>
+                <div class="kotak"></div>
+                <div class="kotak"></div>
+              </div>
+              <div class="kotak tinggi"></div>
+            </div>
+            <div class="grid g4" id="kpiSiswa"></div>
+            <div class="card card-tabel">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <span class="kartu-judul-ikon"
+                    ><svg
+                      fill="none"
+                      height="19"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.9"
+                      viewbox="0 0 24 24"
+                      width="19"
+                    >
+                      <circle cx="12" cy="12" r="8.5"></circle>
+                      <path d="M12 7.6V12l3 2"></path></svg
+                  ></span>
+                  <div>
+                    <h2>Aktivitas terakhir</h2>
+                    <p class="small muted">
+                      Latihan, tanya jawab, dan rangkuman.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div id="tabelRiwayat"></div>
+            </div>
+          </div>
+          <section class="page" id="w-password">
+            <div class="kepala">
+              <div>
+                <h1>Amankan akunmu</h1>
+                <p>
+                  Kata sandi sementara harus diganti sebelum mengakses MugaMind.
+                </p>
+              </div>
+            </div>
+            <div class="card">
+              <h2>Buat kata sandi pribadi</h2>
+              <p>
+                Gunakan kata sandi baru minimal 12 karakter yang hanya kamu
+                ketahui. Setelah disimpan, masuk kembali dengan kata sandi baru.
+              </p>
+              <button class="btn primary" data-act="ubahSandi">
+                Ganti kata sandi sementara
+              </button>
+            </div>
+          </section>
+          <section class="page" id="a-akun">
+            <div class="kepala">
+              <div>
+                <span class="tag">Ruang administrator</span>
+                <h1>Akun &amp; penugasan</h1>
+                <p class="muted">
+                  Atur siapa yang dapat masuk dan kelas yang diajar guru.
+                </p>
+              </div>
+              <button class="btn primary" data-act="adminTambah">
+                + Tambah akun
+              </button>
+            </div>
+            <div
+              class="grid g4"
+              id="adminKpi"
+              aria-label="Ringkasan akun"
+            ></div>
+            <div class="card admin-notice">
+              <h2>Akses sesuai tanggung jawab</h2>
+              <p>
+                Admin mengelola akun dan penugasan. Materi, nilai, dan
+                percakapan tetap berada di ruang guru atau siswa. Akun admin
+                dikelola operator server.
+              </p>
+              <p id="adminPerhatian" class="small"></p>
+            </div>
+            <div class="card">
+              <form id="adminCariForm" class="admin-filters">
+                <label
+                  >Cari akun<input
+                    id="adminCari"
+                    type="search"
+                    maxlength="150"
+                    placeholder="Nama atau email" /></label
+                ><label
+                  >Peran<select id="adminFilter">
+                    <option value="">Semua peran</option>
+                    <option value="siswa">Siswa</option>
+                    <option value="guru">Guru</option>
+                    <option value="admin">Administrator</option>
+                  </select></label
+                ><button class="btn ghost" type="submit">Cari</button>
+              </form>
+              <p id="adminCount" class="small muted" role="status"></p>
+              <div id="adminDaftar"></div>
+              <div class="btnrow">
+                <button
+                  class="btn ghost"
+                  data-act="adminSebelum"
+                  id="adminPrev"
+                >
+                  Sebelumnya</button
+                ><button
+                  class="btn ghost"
+                  data-act="adminSesudah"
+                  id="adminNext"
+                >
+                  Berikutnya
+                </button>
+              </div>
+            </div>
+          </section>
+          <section class="page" id="a-audit">
+            <div class="kepala">
+              <div>
+                <h1>Log perubahan</h1>
+                <p class="muted">
+                  Perubahan akun dan penugasan yang berhasil disimpan. Kata
+                  sandi tidak dicatat.
+                </p>
+              </div>
+            </div>
+            <div class="card">
+              <p id="adminAuditCount" class="small muted" role="status"></p>
+              <div id="adminAuditList"></div>
+              <div class="btnrow">
+                <button
+                  class="btn ghost"
+                  data-act="adminLogPrev"
+                  id="adminLogPrev"
+                >
+                  Sebelumnya</button
+                ><button
+                  class="btn ghost"
+                  data-act="adminLogNext"
+                  id="adminLogNext"
+                >
+                  Berikutnya
+                </button>
+              </div>
+            </div>
+          </section>
+          <div class="page" id="t-dashboard">
+            <div class="kepala">
+              <div>
+                <h1>Dashboard Guru</h1>
+                <p class="muted">
+                  Ringkasan aktivitas pembelajaran dari data yang benar-benar
+                  dikerjakan siswa.
+                </p>
+              </div>
+            </div>
+            <div class="kerangka-halaman">
+              <div class="grid g4">
+                <div class="kotak"></div>
+                <div class="kotak"></div>
+                <div class="kotak"></div>
+                <div class="kotak"></div>
+              </div>
+              <div class="grid g2">
+                <div class="kotak sedang"></div>
+                <div class="kotak sedang"></div>
+              </div>
+            </div>
+            <div class="grid g4" id="kpiGuru"></div>
+            <div class="grid g2">
+              <div class="card">
+                <div class="kartu-judul">
+                  <div class="kartu-judul-teks">
+                    <span class="kartu-judul-ikon"
+                      ><svg
+                        fill="none"
+                        height="19"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.9"
+                        viewbox="0 0 24 24"
+                        width="19"
+                      >
+                        <path d="M4 20h16"></path>
+                        <path d="M7 20v-8M12 20V5M17 20v-5"></path></svg
+                    ></span>
+                    <div><h2>Performa per Mata Pelajaran</h2></div>
+                  </div>
+                </div>
+                <div class="list" id="performaMapel"></div>
+              </div>
+              <div class="card">
+                <div class="kartu-judul">
+                  <div class="kartu-judul-teks">
+                    <span class="kartu-judul-ikon"
+                      ><svg
+                        fill="none"
+                        height="19"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.9"
+                        viewbox="0 0 24 24"
+                        width="19"
+                      >
+                        <circle cx="12" cy="12" r="8.5"></circle>
+                        <path d="M12 7.6V12l3 2"></path></svg
+                    ></span>
+                    <div><h2>Aktivitas Terbaru</h2></div>
+                  </div>
+                </div>
+                <div class="list" id="aktivitasGuru"></div>
+              </div>
+            </div>
+          </div>
+          <div class="page" id="t-materi">
+            <div class="kepala">
+              <div>
+                <h1>Kelola Materi</h1>
+                <p class="muted">
+                  Materi inilah yang dibaca siswa dan dipakai chatbot sebagai
+                  sumber jawaban.
+                </p>
+              </div>
+              <div class="kepala-aksi">
+                <span class="tag">Total materi <b id="jumlahMateri">0</b></span
+                ><button
+                  class="btn primary"
+                  data-act="bukaEditor"
+                  data-area="materi"
+                  type="button"
+                >
+                  ＋ Tambah materi
+                </button>
+              </div>
+            </div>
+            <div class="card library-panel" id="materiLibrary">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <span class="kartu-judul-ikon"
+                    ><svg
+                      fill="none"
+                      height="19"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.9"
+                      viewbox="0 0 24 24"
+                      width="19"
+                    >
+                      <path
+                        d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5Z"
+                      ></path>
+                      <path d="M4 5.5v15"></path></svg
+                  ></span>
+                  <div>
+                    <h2>Daftar materi</h2>
+                    <p class="small muted">
+                      Materi yang sudah masuk, lengkap dengan kelas dan jumlah
+                      soal turunannya.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="library-toolbar">
+                <div class="search-field">
+                  <label class="sr-only" for="cariMateri">Cari materi</label
+                  ><input
+                    autocomplete="off"
+                    id="cariMateri"
+                    placeholder="Cari judul atau mata pelajaran…"
+                    type="search"
+                  />
+                </div>
+                <p class="small muted" id="hasilCariMateri" role="status"></p>
+              </div>
+              <div id="daftarMateriGuru"></div>
+            </div>
+            <section class="editor-workspace" hidden="" id="materiEditor">
+              <div class="editor-heading">
+                <button
+                  class="btn ghost"
+                  data-act="tutupEditor"
+                  data-area="materi"
+                  type="button"
+                >
+                  ← Kembali ke daftar
+                </button>
+                <div>
+                  <p class="eyebrow">Materi pembelajaran</p>
+                  <h1 id="editorTitleMateri">Tambah materi</h1>
+                  <p class="muted">
+                    Lengkapi isian dan periksa kelas tujuan sebelum menyimpan.
+                  </p>
+                </div>
+              </div>
+              <div id="editHostMateri"></div>
+              <form
+                class="card editor-form"
+                data-create-form="materi"
+                id="formMateri"
+              >
+                <div class="kartu-judul">
+                  <div class="kartu-judul-teks">
+                    <span class="kartu-judul-ikon"
+                      ><svg
+                        fill="none"
+                        height="19"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.9"
+                        viewbox="0 0 24 24"
+                        width="19"
+                      >
+                        <path d="M12 5v14M5 12h14"></path></svg
+                    ></span>
+                    <div>
+                      <h2>Materi baru</h2>
+                      <p class="small muted">
+                        Isi tiga bagian ini dari atas ke bawah, lalu simpan.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <p class="section-label">1 · Info materi</p>
+                <div class="formgrid formgrid-3">
+                  <div>
+                    <label for="mMapel">Mata Pelajaran</label>
+                    <select id="mMapel">
+                      <option>IPA</option>
+                      <option>Matematika</option>
+                      <option>Bahasa Indonesia</option>
+                      <option>IPS</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="mKelas">Tingkat</label>
+                    <select id="mKelas">
+                      <option>VII</option>
+                      <option selected="">VIII</option>
+                      <option>IX</option>
+                    </select>
+                  </div>
+                  <div class="full">
+                    <label for="mJudul">Judul Materi</label
+                    ><input
+                      id="mJudul"
+                      maxlength="255"
+                      placeholder="Sistem Pencernaan Manusia"
+                      required=""
+                    />
+                  </div>
+                </div>
+                <p class="section-label">2 · Berlaku untuk kelas mana</p>
+                <div class="kelas-pilih" id="mRombel"></div>
+                <p class="small muted catatan-bidang">
+                  Pilih rombel yang menjadi tujuan materi. Hanya penugasan
+                  mengajarmu yang tersedia.
+                </p>
+                <p class="section-label">3 · Isi materi</p>
+                <label for="mTeks">Isi materi</label
+                ><textarea
+                  aria-describedby="materiError"
+                  id="mTeks"
+                  placeholder="Alveolus adalah tempat pertukaran gas oksigen dan karbon dioksida.
+Trakea adalah saluran udara yang menghubungkan laring dengan bronkus."
+                  required=""
+                  rows="10"
+                ></textarea>
+                <div class="petunjuk jarak-atas">
+                  <span aria-hidden="true"
+                    ><svg
+                      fill="none"
+                      height="16"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewbox="0 0 24 24"
+                      width="16"
+                    >
+                      <path
+                        d="M12 3a6 6 0 0 0-3.5 10.9c.5.4.8 1 .8 1.6v.5h5.4v-.5c0-.6.3-1.2.8-1.6A6 6 0 0 0 12 3Z"
+                      ></path>
+                      <path d="M10 19h4"></path></svg
+                  ></span>
+                  <p class="small muted">
+                    Tulis <b>satu kalimat per baris</b> dengan pola
+                    <b>"X adalah Y"</b>. Pola inilah yang dipakai fitur Generate
+                    Soal di halaman Kelola Soal.
+                  </p>
+                </div>
+                <p
+                  class="form-error"
+                  hidden=""
+                  id="materiError"
+                  role="alert"
+                ></p>
+                <div class="btnrow jarak-atas">
+                  <button
+                    class="btn ghost"
+                    data-act="pratinjauMateri"
+                    type="button"
+                  >
+                    Pratinjau</button
+                  ><button
+                    class="btn primary"
+                    data-act="tambahMateri"
+                    type="button"
+                  >
+                    Simpan materi
+                  </button>
+                  <button
+                    class="btn ghost"
+                    data-act="tutupEditor"
+                    data-area="materi"
+                    type="button"
+                  >
+                    Batal
+                  </button>
+                </div>
+              </form>
+            </section>
+          </div>
+          <div class="page" id="t-soal">
+            <div class="kepala">
+              <div>
+                <h1>Kelola Soal</h1>
+                <p class="muted">
+                  Buat soal manual, atau minta bantuan generate dari materi.
+                  Guru tetap yang memutuskan soal terbit.
+                </p>
+              </div>
+              <div class="kepala-aksi">
+                <span class="tag">Bank soal <b id="jumlahSoal">0</b></span
+                ><button
+                  class="btn primary"
+                  data-act="bukaEditor"
+                  data-area="soal"
+                  type="button"
+                >
+                  ＋ Tambah soal
+                </button>
+              </div>
+            </div>
+            <div class="card library-panel" id="soalLibrary">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <span class="kartu-judul-ikon"
+                    ><svg
+                      fill="none"
+                      height="19"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.9"
+                      viewbox="0 0 24 24"
+                      width="19"
+                    >
+                      <path d="M5 5h14M5 10h14M5 15h9M5 20h6"></path></svg
+                  ></span>
+                  <div>
+                    <h2>Bank soal</h2>
+                    <p class="small muted">
+                      Semua soal yang sudah dibuat, beserta kelas tujuan dan
+                      kuncinya.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="library-toolbar">
+                <div class="search-field">
+                  <label class="sr-only" for="cariSoal">Cari soal</label
+                  ><input
+                    autocomplete="off"
+                    id="cariSoal"
+                    placeholder="Cari pertanyaan atau materi sumber…"
+                    type="search"
+                  />
+                </div>
+                <p class="small muted" id="hasilCariSoal" role="status"></p>
+              </div>
+              <div id="daftarSoal"></div>
+            </div>
+            <section class="editor-workspace" hidden="" id="soalEditor">
+              <div class="editor-heading">
+                <button
+                  class="btn ghost"
+                  data-act="tutupEditor"
+                  data-area="soal"
+                  type="button"
+                >
+                  ← Kembali ke daftar
+                </button>
+                <div>
+                  <p class="eyebrow">Bank soal</p>
+                  <h1 id="editorTitleSoal">Tambah soal</h1>
+                  <p class="muted">
+                    Lengkapi isian dan periksa kelas tujuan sebelum menyimpan.
+                  </p>
+                </div>
+              </div>
+              <div id="editHostSoal"></div>
+              <div class="tabsoal">
+                <input
+                  checked=""
+                  class="tabinput"
+                  id="tabSoalA"
+                  name="tabSoal"
+                  type="radio"
+                />
+                <input
+                  class="tabinput"
+                  id="tabSoalB"
+                  name="tabSoal"
+                  type="radio"
+                />
+                <input
+                  class="tabinput"
+                  id="tabSoalC"
+                  name="tabSoal"
+                  type="radio"
+                />
+                <div class="tabbar">
+                  <label for="tabSoalA">Tulis soal</label>
+                  <label for="tabSoalB">Unggah berkas soal</label>
+                  <label for="tabSoalC">Generate dari materi</label>
+                </div>
+                <div class="tabpanel panel-a">
+                  <form
+                    class="card editor-form"
+                    data-create-form="soal"
+                    id="formSoal"
+                  >
+                    <div class="kartu-judul">
+                      <div class="kartu-judul-teks">
+                        <span class="kartu-judul-ikon"
+                          ><svg
+                            fill="none"
+                            height="19"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.9"
+                            viewbox="0 0 24 24"
+                            width="19"
+                          >
+                            <path d="M12 5v14M5 12h14"></path></svg
+                        ></span>
+                        <div>
+                          <h2>Tulis soal baru</h2>
+                          <p class="small muted">
+                            Bisa berupa pilihan ganda atau essay, dengan atau tanpa gambar pendukung (maksimal 50 soal).
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="section-label">
+                      1 · Tipe dan pertanyaan soal
+                    </p>
+                    <div class="formgrid">
+                      <div>
+                        <label for="qTipeSoal">Tipe soal</label>
+                        <select id="qTipeSoal" data-act="gantiTipeSoalManual">
+                          <option value="pilihan_ganda">Pilihan Ganda (A/B/C/D)</option>
+                          <option value="essay">Essay / Uraian</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label>Gambar soal (opsional)</label>
+                        <div class="soal-gambar-uploader">
+                          <label for="qGambarInput" class="btn ghost small" style="cursor:pointer">
+                            📷 Pilih gambar soal
+                          </label>
+                          <input
+                            type="file"
+                            id="qGambarInput"
+                            accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                            class="sr-only"
+                            data-act="pilihGambarSoal"
+                          />
+                          <div id="qPreviewGambarWrap" class="preview-gambar-wrap" hidden>
+                            <img id="qPreviewGambar" src="" alt="Pratinjau Gambar Soal" />
+                            <button type="button" class="btn danger small" data-act="hapusGambarSoal">
+                              Hapus gambar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="full">
+                        <label for="qPertanyaan">Pertanyaan</label
+                        ><textarea
+                          id="qPertanyaan"
+                          maxlength="4000"
+                          placeholder="Organ tempat pertukaran gas adalah…"
+                          required=""
+                          rows="3"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div id="blokOpsiPG">
+                      <p class="section-label">
+                        2 · Pilihan jawaban
+                      </p>
+                      <div class="formgrid">
+                        <div>
+                          <label for="qA">Opsi A</label
+                          ><input id="qA" maxlength="2000" />
+                        </div>
+                        <div>
+                          <label for="qB">Opsi B</label
+                          ><input id="qB" maxlength="2000" />
+                        </div>
+                        <div>
+                          <label for="qC">Opsi C</label
+                          ><input id="qC" maxlength="2000" />
+                        </div>
+                        <div>
+                          <label for="qD">Opsi D</label
+                          ><input id="qD" maxlength="2000" />
+                        </div>
+                        <div>
+                          <label for="qBenar">Jawaban benar</label>
+                          <select id="qBenar">
+                            <option value="0">A</option>
+                            <option value="1">B</option>
+                            <option value="2">C</option>
+                            <option value="3">D</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="blokEssay" hidden>
+                      <p class="section-label">
+                        2 · Kunci dan pedoman penilaian essay
+                      </p>
+                      <div class="formgrid">
+                        <div class="full">
+                          <label for="qKunciEssay">Kunci jawaban / pedoman penilaian essay</label>
+                          <textarea
+                            id="qKunciEssay"
+                            placeholder="Tuliskan poin-poin jawaban yang diharapkan dari siswa..."
+                            rows="2"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="section-label">3 · Pembahasan dan penugasan</p>
+                    <div class="formgrid">
+                      <div class="full">
+                        <label for="qPembahasan">Pembahasan (opsional)</label
+                        ><textarea
+                          id="qPembahasan"
+                          placeholder="Jelaskan mengapa jawaban benar. Ditampilkan setelah siswa mengumpulkan jawaban."
+                        ></textarea>
+                      </div>
+                      <div>
+                        <label for="qMateriManual">Materi sumber</label
+                        ><select id="qMateriManual" required=""></select>
+                      </div>
+                    </div>
+                    <div class="full jarak-atas">
+                      <label>Terbitkan untuk kelas</label>
+                      <div class="kelas-pilih" id="qKelasManual"></div>
+                      <p class="small muted catatan-bidang">
+                        Kelas tujuan mengikuti materi sumber dan penugasan
+                        mengajarmu (maksimal 50 soal per materi).
+                      </p>
+                    </div>
+                    <div class="btnrow jarak-atas">
+                      <button
+                        class="btn primary"
+                        data-act="tambahSoalManual"
+                        type="button"
+                      >
+                        Tambah soal
+                      </button>
+                    </div>
+                    <p
+                      class="form-error"
+                      hidden=""
+                      id="soalError"
+                      role="alert"
+                    ></p>
+                  </form>
+                </div>
+                <div class="tabpanel panel-b">
+                  <div class="card editor-form" id="formUploadSoal">
+                    <div class="kartu-judul">
+                      <div class="kartu-judul-teks">
+                        <span class="kartu-judul-ikon"
+                          ><svg
+                            fill="none"
+                            height="19"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.9"
+                            viewbox="0 0 24 24"
+                            width="19"
+                          >
+                            <path d="M12 16V5M8 9l4-4 4 4M4 15.5V18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"></path>
+                          </svg>
+                        </span>
+                        <div>
+                          <h2>Unggah berkas soal</h2>
+                          <p class="small muted">
+                            Unggah berkas soal dari PDF, TXT, atau Markdown (hingga 50 soal, campuran PG &amp; Essay).
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <p class="section-label">1 · Materi sumber &amp; berkas soal</p>
+                    <div class="formgrid">
+                      <div>
+                        <label for="uSoalMateri">Materi sumber</label>
+                        <select id="uSoalMateri" required=""></select>
+                      </div>
+                      <div>
+                        <label>Pilih berkas soal</label>
+                        <div>
+                          <label for="fileBerkasSoal" class="btn ghost small" style="cursor:pointer">
+                            📁 Pilih file PDF / TXT / MD
+                          </label>
+                          <input
+                            type="file"
+                            id="fileBerkasSoal"
+                            accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg,.webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/png,image/jpeg,image/webp"
+                            class="sr-only"
+                            data-act="pilihFileSoal"
+                          />
+                          <span class="small muted" id="labelFileSoal">Belum ada file dipilih</span>
+                        </div>
+                      </div>
+                      <div class="full">
+                        <label for="uTeksBerkasSoal">Isi teks soal (atau tempel teks di sini)</label>
+                        <textarea
+                          id="uTeksBerkasSoal"
+                          rows="6"
+                          placeholder="1. Pertanyaan pilihan ganda&#10;A. Opsi A&#10;B. Opsi B&#10;C. Opsi C&#10;D. Opsi D&#10;Kunci: A&#10;&#10;2. Pertanyaan essay&#10;Kunci: Jawaban uraian..."
+                        ></textarea>
+                        <p class="small muted catatan-bidang">
+                          Format otomatis mengenali nomor soal, opsi A-D (pilihan ganda), dan soal essay (tanpa opsi / dengan label essay).
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="btnrow jarak-atas">
+                      <button
+                        class="btn emas"
+                        data-act="prosesParseBerkasSoal"
+                        type="button"
+                      >
+                        Pratinjau &amp; Parse Soal
+                      </button>
+                    </div>
+
+                    <div id="uPreviewSoalWrap" class="jarak-atas" hidden>
+                      <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--line);" />
+                      <div class="kartu-judul-teks" style="margin-bottom: 12px;">
+                        <div>
+                          <h3 id="uJudulPreviewSoal">Pratinjau Soal Terdeteksi</h3>
+                          <p class="small muted" id="uSubPreviewSoal"></p>
+                        </div>
+                      </div>
+                      <div id="uDaftarPreviewSoal"></div>
+
+                      <div class="full jarak-atas">
+                        <label>Terbitkan untuk kelas</label>
+                        <div class="kelas-pilih" id="uKelasUploadSoal"></div>
+                      </div>
+
+                      <div class="btnrow jarak-atas">
+                        <button
+                          class="btn primary"
+                          data-act="terbitkanSoalUpload"
+                          type="button"
+                        >
+                          Terbitkan Semua Soal
+                        </button>
+                      </div>
+                    </div>
+
+                    <p
+                      class="form-error"
+                      hidden=""
+                      id="uploadSoalError"
+                      role="alert"
+                    ></p>
+                  </div>
+                </div>
+                <div class="tabpanel panel-c">
+                  <form
+                    class="card editor-form"
+                    data-create-form="soal"
+                    id="formGenerate"
+                  >
+                    <div class="kartu-judul">
+                      <div class="kartu-judul-teks">
+                        <span class="kartu-judul-ikon"
+                          ><svg
+                            fill="none"
+                            height="19"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.9"
+                            viewbox="0 0 24 24"
+                            width="19"
+                          >
+                            <path
+                              d="M12 3.2 14.2 9l5.8.4-4.5 3.7 1.4 5.7L12 15.7 7.1 18.8l1.4-5.7L4 9.4 9.8 9Z"
+                            ></path></svg
+                        ></span>
+                        <div>
+                          <h2>Buat soal dari materi</h2>
+                          <p class="small muted">
+                            Dari kalimat definisi pada materi yang sudah diisi.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="formgrid">
+                      <div>
+                        <label for="soalMateri">Sumber materi</label
+                        ><select id="soalMateri"></select>
+                      </div>
+                      <div>
+                        <label for="soalTipeGenerate">Jenis soal</label>
+                        <select id="soalTipeGenerate">
+                          <option value="pilihan_ganda">Pilihan ganda</option>
+                          <option value="essay">Esai</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label for="soalJumlah">Jumlah soal (5–20)</label
+                        ><input
+                          id="soalJumlah"
+                          max="20"
+                          min="5"
+                          type="number"
+                          value="5"
+                        />
+                      </div>
+                    </div>
+                    <div class="btnrow jarak-atas">
+                      <button
+                        class="btn emas"
+                        data-act="generateSoal"
+                        type="button"
+                      >
+                        Buat pratinjau soal
+                      </button>
+                    </div>
+                    <div class="petunjuk jarak-atas">
+                      <span aria-hidden="true"
+                        ><svg
+                          fill="none"
+                          height="16"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewbox="0 0 24 24"
+                          width="16"
+                        >
+                          <circle cx="12" cy="12" r="8.5"></circle>
+                          <path d="M12 11.2v5M12 8h.01"></path></svg
+                      ></span>
+                      <p class="small muted">
+                        Soal dibuat dari kalimat definisi. Periksa isi dan
+                        kuncinya sebelum diterbitkan ke siswa.
+                      </p>
+                    </div>
+                    <p
+                      class="form-error"
+                      hidden=""
+                      id="generateError"
+                      role="alert"
+                    ></p>
+                  </form>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="page" id="t-upload">
+            <div class="kepala">
+              <div>
+                <h1>Unggah materi</h1>
+                <p class="muted">
+                  Masukkan modul atau bahan ajar sebagai sumber materi.
+                </p>
+              </div>
+            </div>
+            <div class="langkah">
+              <span class="aktif"><b>1</b>Pilih berkas</span>
+              <span><b>2</b>Periksa isinya</span>
+              <span><b>3</b>Simpan jadi materi</span>
+            </div>
+            <div class="grid g2">
+              <div class="card">
+                <div class="kartu-judul">
+                  <div class="kartu-judul-teks">
+                    <span class="kartu-judul-ikon"
+                      ><svg
+                        fill="none"
+                        height="19"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.9"
+                        viewbox="0 0 24 24"
+                        width="19"
+                      >
+                        <path d="M12 16V5"></path>
+                        <path d="M8 9l4-4 4 4"></path>
+                        <path
+                          d="M4 15.5V18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"
+                        ></path></svg
+                    ></span>
+                    <div>
+                      <h2>Ambil dari berkas</h2>
+                      <p class="small muted">
+                        Berkas teks langsung terbaca di sini.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="unggah-area">
+                  <div class="unggah-ikon">
+                    <svg
+                      fill="none"
+                      height="44"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2.6"
+                      viewbox="0 0 48 48"
+                      width="44"
+                    >
+                      <path
+                        d="M29 7H17a4 4 0 0 0-4 4v26a4 4 0 0 0 4 4h14a4 4 0 0 0 4-4V15z"
+                      ></path>
+                      <path d="M29 7v8h8"></path>
+                      <path d="M19 24h10M19 30h10M19 36h5"></path>
+                    </svg>
+                  </div>
+                  <h3>Pilih berkas materi</h3>
+                  <p class="muted small">
+                    Mendukung .pdf, .txt, dan .md — isi berkas terbaca otomatis.
+                  </p>
+                  <label class="filepick" for="fileMateri"
+                    >Pilih file materi</label
+                  >
+                  <input
+                    accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg,.webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/png,image/jpeg,image/webp"
+                    class="sr-only"
+                    data-act="pilihFile"
+                    id="fileMateri"
+                    type="file"
+                  />
+                  <p class="small muted catatan-bidang">
+                    PDF, DOCX, TXT, Markdown, PNG, dan JPG (hingga 10 MB). Isi dokumen dibaca lalu ditampilkan untuk Anda periksa.
+                  </p>
+                </div>
+                <p class="section-label">Terakhir diunggah</p>
+                <div id="daftarUpload"></div>
+              </div>
+              <form class="card" data-upload-form="" id="formUpload">
+                <div class="kartu-judul">
+                  <div class="kartu-judul-teks">
+                    <span class="kartu-judul-ikon"
+                      ><svg
+                        fill="none"
+                        height="19"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.9"
+                        viewbox="0 0 24 24"
+                        width="19"
+                      >
+                        <path d="M9 4h6l1 3h4v13H4V7h4z"></path>
+                        <path d="M9 13h6M9 16h4"></path></svg
+                    ></span>
+                    <div>
+                      <h2>Atau tempel teksnya</h2>
+                      <p class="small muted">
+                        Isi berkas yang terbaca tadi muncul di sini.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="formgrid">
+                  <div>
+                    <label for="uJudul">Judul</label
+                    ><input
+                      id="uJudul"
+                      maxlength="255"
+                      placeholder="Modul IPA Bab 3"
+                      required=""
+                    />
+                  </div>
+                  <div>
+                    <label for="uMapel">Mata Pelajaran</label>
+                    <select id="uMapel">
+                      <option>IPA</option>
+                      <option>Matematika</option>
+                      <option>Bahasa Indonesia</option>
+                      <option>IPS</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="uKelas">Tingkat</label>
+                    <select id="uKelas">
+                      <option>VII</option>
+                      <option selected="">VIII</option>
+                      <option>IX</option>
+                    </select>
+                  </div>
+                  <div class="full">
+                    <label>Berlaku untuk rombel</label>
+                    <div class="kelas-pilih" id="uRombel"></div>
+                  </div>
+                  <div class="full">
+                    <label for="uTeks">Isi materi</label
+                    ><textarea
+                      id="uTeks"
+                      placeholder="Tempel isi modul di sini…"
+                      required=""
+                    ></textarea>
+                  </div>
+                </div>
+                <p
+                  class="form-error"
+                  hidden=""
+                  id="uploadError"
+                  role="alert"
+                ></p>
+                <div class="btnrow jarak-atas">
+                  <button
+                    class="btn primary"
+                    data-act="tempelMateri"
+                    type="button"
+                  >
+                    Simpan sebagai materi
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="page" id="t-analisis">
+            <div class="kepala">
+              <div>
+                <h1>Hasil belajar</h1>
+                <p class="muted">
+                  Dihitung dari latihan yang benar-benar dikerjakan siswa,
+                  dipisah per kelas.
+                </p>
+              </div>
+            </div>
+            <div class="kerangka-halaman">
+              <div class="kotak pendek"></div>
+              <div class="kotak sedang"></div>
+              <div class="grid g2">
+                <div class="kotak sedang"></div>
+                <div class="kotak sedang"></div>
+              </div>
+            </div>
+            <div class="saringan">
+              <div class="kelasbar" id="filterKelasAnalisis"></div>
+              <div class="kelasbar" id="filterRombelAnalisis"></div>
+            </div>
+            <div class="notice blue" id="ttlInfo"></div>
+            <div class="card" id="panelEsai">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <div>
+                    <h2>Esai menunggu penilaian</h2>
+                    <p class="small muted">
+                      Beri nilai 0–100 untuk tiap jawaban. Nilai akhir dihitung ulang otomatis.
+                    </p>
+                  </div>
+                </div>
+                <a class="btn ghost" id="unduhNilai" href="/api/latihan/ekspor">
+                  Unduh nilai (CSV)
+                </a>
+              </div>
+              <div id="daftarEsai"></div>
+            </div>
+            <div class="card" id="rekapNilaiPanel">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <div><h2>Rangkuman Nilai Siswa</h2>
+                    <p class="small muted">Filter berdasarkan tanggal, mata pelajaran, kelas, dan nama siswa.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="formgrid formgrid-3 rekap-filter">
+                <div><label for="rekapTanggal">Tanggal</label><input id="rekapTanggal" type="date" /></div>
+                <div><label for="rekapMapel">Mata pelajaran</label><select id="rekapMapel"><option value="">Semua mata pelajaran</option></select></div>
+                <div><label for="rekapNama">Nama siswa</label><input id="rekapNama" type="search" placeholder="Cari nama siswa..." /></div>
+              </div>
+              <div class="table-wrap">
+                <table class="table-rekap">
+                  <thead><tr><th>Tanggal</th><th>Nama siswa</th><th>Kelas</th><th>Mata pelajaran</th><th>Materi</th><th>Nilai</th></tr></thead>
+                  <tbody id="rekapNilai"><tr><td colspan="6">Memuat hasil belajar…</td></tr></tbody>
+                </table>
+              </div>
+              <p class="small muted" id="rekapJumlah" role="status"></p>
+            </div>
+            <div class="card">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <span class="kartu-judul-ikon"
+                    ><svg
+                      fill="none"
+                      height="19"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.9"
+                      viewbox="0 0 24 24"
+                      width="19"
+                    >
+                      <path d="M4 20h16"></path>
+                      <path d="M7 20v-8M12 20V5M17 20v-5"></path></svg
+                  ></span>
+                  <div>
+                    <h2 id="judulRingkasan">Ringkasan per Kelas</h2>
+                    <p class="small muted">
+                      Nilai rata-rata tiap kelas, dihitung dari latihan yang
+                      dikerjakan.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div id="ringkasanKelas"></div>
+            </div>
+            <div class="grid g2">
+              <div class="card">
+                <div class="kartu-judul">
+                  <div class="kartu-judul-teks">
+                    <span class="kartu-judul-ikon"
+                      ><svg
+                        fill="none"
+                        height="19"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.9"
+                        viewbox="0 0 24 24"
+                        width="19"
+                      >
+                        <path d="M5 19V9M12 19V5M19 19v-6"></path></svg
+                    ></span>
+                    <div><h2>Distribusi Nilai</h2></div>
+                  </div>
+                </div>
+                <div id="distribusiNilai"></div>
+              </div>
+              <div class="card">
+                <div class="kartu-judul">
+                  <div class="kartu-judul-teks">
+                    <span class="kartu-judul-ikon"
+                      ><svg
+                        fill="none"
+                        height="19"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.9"
+                        viewbox="0 0 24 24"
+                        width="19"
+                      >
+                        <path d="M12 4 3 19h18z"></path>
+                        <path d="M12 10v4M12 17h.01"></path></svg
+                    ></span>
+                    <div><h2>Soal yang Paling Sering Salah</h2></div>
+                  </div>
+                </div>
+                <div id="soalSulit"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="kartu-judul">
+                <div class="kartu-judul-teks">
+                  <span class="kartu-judul-ikon"
+                    ><svg
+                      fill="none"
+                      height="19"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.9"
+                      viewbox="0 0 24 24"
+                      width="19"
+                    >
+                      <path
+                        d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5Z"
+                      ></path>
+                      <path d="M4 5.5v15"></path></svg
+                  ></span>
+                  <div>
+                    <h2>Rincian per Materi</h2>
+                    <p class="small muted">
+                      Materi yang sudah atau belum dikerjakan siswa.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div id="rincianMateri"></div>
+            </div>
+          </div>
+          <div class="footer-note">
+            MugaMind · Ruang belajar bersama, sesuai kelasmu.
+          </div>
+        </section>
+      </main>
+      <nav aria-label="Navigasi utama siswa" class="mobile-nav" id="mobileNav">
+        <button data-act="bukaHalaman" data-page="s-materi" type="button">
+          <svg
+            fill="none"
+            height="17"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.9"
+            viewbox="0 0 24 24"
+            width="17"
+          >
+            <path
+              d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5Z"
+            ></path>
+            <path d="M4 5.5v15"></path></svg
+          ><span>Materi</span></button
+        ><button data-act="bukaHalaman" data-page="s-chat" type="button">
+          <svg
+            fill="none"
+            height="17"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.9"
+            viewbox="0 0 24 24"
+            width="17"
+          >
+            <path
+              d="M21 12a8 8 0 0 1-8 8H8l-4 3v-6.5A8 8 0 0 1 12 4h1a8 8 0 0 1 8 8Z"
+            ></path></svg
+          ><span>Tanya</span></button
+        ><button data-act="bukaHalaman" data-page="s-latihan" type="button">
+          <svg
+            fill="none"
+            height="17"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.9"
+            viewbox="0 0 24 24"
+            width="17"
+          >
+            <path d="M5 4h11l3 3v13H5z"></path>
+            <path d="M15 8h4M15 4v4"></path>
+            <path d="M8.5 13.5l1.8 1.8 3.4-3.6"></path></svg
+          ><span>Latihan</span></button
+        ><button data-act="bukaHalaman" data-page="s-riwayat" type="button">
+          <svg
+            fill="none"
+            height="17"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.9"
+            viewbox="0 0 24 24"
+            width="17"
+          >
+            <circle cx="12" cy="12" r="8.5"></circle>
+            <path d="M12 7.6V12l3 2"></path></svg
+          ><span>Riwayat</span>
+        </button>
+      </nav>
+    </div>
+    <div
+      aria-hidden="true"
+      aria-labelledby="modalJudul"
+      aria-modal="true"
+      class="modal"
+      id="modal"
+      role="dialog"
+    >
+      <div class="modal-card" tabindex="-1">
+        <div class="btnrow antara">
+          <span class="tag" id="modalTag">Materi</span>
+          <button class="btn ghost small" data-act="tutupModal">Tutup</button>
+        </div>
+        <h2 id="modalJudul">Judul</h2>
+        <div id="modalIsi"></div>
+      </div>
+    </div>
+    <div aria-live="polite" class="toast" id="toast" role="status"></div>
+    <script src="src/js/main.js?v=20261109z" type="module"></script>
+  </body>
+</html>
