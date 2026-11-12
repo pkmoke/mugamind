@@ -37,6 +37,12 @@ Variabel lingkungan yang dipakai dibaca di `backend/app/config.py`
 (`APP_ORIGINS`, `ALLOWED_HOSTS`, `DATABASE_URL`, `AI_API_KEY`, `AI_MODEL`, kuota
 AI, masa retensi nilai/aktivitas).
 
+## Sudah diuji dari repo ini
+
+`manage.py init-db` → `manage.py user --peran admin` → `POST /api/auth/login`
+membalas 200, halaman `/`, `/src/styles/dasar.css`, dan `/api/health` semua 200 di
+port 8011 dengan SQLite (Python 3.14). Repo ini berdiri sendiri tanpa Docker.
+
 ## Yang belum ikut di repo ini
 
 Kode di bawah ini diambil dari image Docker yang sedang berjalan, bukan dari
