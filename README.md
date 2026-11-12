@@ -18,6 +18,22 @@ menjalankan di laptop sendiri).
   - `manage.py` — init basis data, impor siswa, backup, reset data uji
 - `requirements.txt` — dependensi Python terkunci dengan hash
 
+## Menjalankan dengan Docker
+
+```bash
+cp .env.example .env          # lalu isi POSTGRES_PASSWORD dan AI_API_KEY
+docker compose up -d --build
+```
+
+Buka `http://127.0.0.1:8899/`. Isinya lima layanan: `db` (PostgreSQL 17),
+`migrate` (menyiapkan tabel sekali jalan), `backend` (uvicorn di port 8000, tidak
+dipublikasikan ke host), `maintenance` (pembersihan data lama tiap lima menit), dan
+`frontend` (nginx yang juga meneruskan `/api/` ke backend). Data disimpan di dua
+volume, `postgres_data` dan `materi_data`, jadi `docker compose down` tidak
+menghapus isinya; `docker compose down -v` menghapusnya.
+
+Menghentikan tanpa menghapus wadah: `docker compose stop`.
+
 ## Menjalankan tanpa Docker
 
 ```bash
@@ -39,19 +55,22 @@ AI, masa retensi nilai/aktivitas).
 
 ## Sudah diuji dari repo ini
 
-`manage.py init-db` → `manage.py user --peran admin` → `POST /api/auth/login`
-membalas 200, halaman `/`, `/src/styles/dasar.css`, dan `/api/health` semua 200 di
-port 8011 dengan SQLite (Python 3.14). Repo ini berdiri sendiri tanpa Docker.
+Dengan SQLite (tanpa Docker): `manage.py init-db` → `manage.py user --peran admin`
+→ `POST /api/auth/login` membalas 200, halaman `/`, `/src/styles/dasar.css`, dan
+`/api/health` semua 200.
+
+Dengan Docker: `docker compose up -d --build` dari repo ini membangun ulang kelima
+layanan sampai `backend` healthy, halaman depan 200, `/api/health` `{"status":"ok"}`,
+dan login guru 200 lewat nginx di port 8899.
 
 ## Yang belum ikut di repo ini
 
 Kode di bawah ini diambil dari image Docker yang sedang berjalan, bukan dari
 folder kerja aslinya, jadi berkas berikut belum ada:
 
-- `docker-compose.yml`, `Dockerfile` (backend & frontend)
-- `.env` (kunci API model, kata sandi basis data)
 - `docs/` (panduan menjalankan & operasional)
 - `tests/` (37 tes otomatis) dan `scripts/probe_rbac.py`
+- `.env` asli (contohnya ada di `.env.example`)
 
 Catatan: `frontend` di sini disajikan apa adanya (nginx di produksi memakai
 folder `src/` yang sama, tanpa proses build).

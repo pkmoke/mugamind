@@ -1,0 +1,78 @@
+# Nama project sengaja "bemai-lokal" supaya volume lama
+# (bemai-lokal_postgres_data, bemai-lokal_materi_data) tetap terpakai.
+name: bemai-lokal
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bemai
+      POSTGRES_DB: bemai
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD wajib diisi di .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bemai -d bemai"]
+      interval: 5s
+      retries: 20
+
+  migrate:
+    build: ./backend
+    restart: "no"
+    command: ["python", "manage.py", "init-db"]
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: [.env]
+    environment:
+      DATABASE_URL: postgresql+psycopg://bemai:${POSTGRES_PASSWORD}@db:5432/bemai
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    env_file: [.env]
+    environment:
+      DATABASE_URL: postgresql+psycopg://bemai:${POSTGRES_PASSWORD}@db:5432/bemai
+      GAMBAR_MATERI_DIR: /app/data/materi
+    volumes:
+      - materi_data:/app/data/materi
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3).status == 200 else 1)"]
+      interval: 10s
+      retries: 12
+
+  maintenance:
+    build: ./backend
+    restart: unless-stopped
+    command: ["python", "maintenance.py"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    env_file: [.env]
+    environment:
+      DATABASE_URL: postgresql+psycopg://bemai:${POSTGRES_PASSWORD}@db:5432/bemai
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8899:8899"
+    volumes:
+      - materi_data:/srv/materi:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8899/ || exit 1"]
+      interval: 10s
+      retries: 6
+
+volumes:
+  postgres_data:
+  materi_data:
