@@ -126,7 +126,14 @@ export async function renderAdmin() {
           "div",
           { class: "admin-account-info" },
           elemen("h3", {}, u.nama),
-          elemen("p", { class: "small muted" }, u.email || "Tanpa email"),
+          elemen(
+            "p",
+            { class: "small muted" },
+            u.nis ? `NIS ${u.nis}` : u.email || "Tanpa identitas",
+          ),
+          u.nis && u.email
+            ? elemen("p", { class: "small muted" }, u.email)
+            : null,
           elemen(
             "div",
             { class: "btnrow" },
@@ -285,11 +292,21 @@ function editAccount(u) {
   });
   const email = elemen("input", {
     type: "email",
-    required: true,
     maxlength: 255,
     value: u?.email || "",
     autocomplete: "off",
   });
+  const nis = elemen("input", {
+    maxlength: 50,
+    value: u?.nis || "",
+    autocomplete: "off",
+    inputMode: "numeric",
+  });
+  const nisWrap = field(
+    "NIS",
+    nis,
+    "Nomor induk siswa. Dipakai siswa untuk masuk kalau tidak punya email.",
+  );
   const role = select(
     [
       ["siswa", "Siswa"],
@@ -302,7 +319,7 @@ function editAccount(u) {
     u?.tingkat || "VIII",
   );
   const rombel = select(
-    ["A", "B", "C", "D", "E", "F"].map((x) => [x, x]),
+    ["A", "B", "C", "D"].map((x) => [x, x]),
     u?.rombel || "A",
   );
   const kelas = elemen(
@@ -312,7 +329,10 @@ function editAccount(u) {
     field("Rombel", rombel),
   );
   const roleChanged = () => {
-    kelas.hidden = role.value !== "siswa";
+    const siswa = role.value === "siswa";
+    kelas.hidden = !siswa;
+    nisWrap.hidden = !siswa;
+    email.required = !siswa;
   };
   role.onchange = roleChanged;
   roleChanged();
@@ -327,7 +347,12 @@ function editAccount(u) {
   if (temp) temp.minLength = 12;
   const content = [
     field("Nama lengkap", nama),
-    field("Email login", email),
+    field(
+      "Email login",
+      email,
+      "Wajib untuk guru. Untuk siswa boleh dikosongkan kalau belum punya email.",
+    ),
+    nisWrap,
     field("Peran", role),
     kelas,
     field(
@@ -354,7 +379,8 @@ function editAccount(u) {
     async (adminPassword) => {
       const data = {
         nama: nama.value.trim(),
-        email: email.value.trim(),
+        email: email.value.trim() || null,
+        nis: role.value === "siswa" ? nis.value.trim() || null : null,
         peran: role.value,
         tingkat: role.value === "siswa" ? tingkat.value : null,
         rombel: role.value === "siswa" ? rombel.value : null,
@@ -380,7 +406,7 @@ function assignments(u) {
         t.tingkat || "VIII",
       ),
       rombel = select(
-        ["A", "B", "C", "D", "E", "F"].map((x) => [x, x]),
+        ["A", "B", "C", "D"].map((x) => [x, x]),
         t.rombel || "A",
       );
     const remove = elemen(

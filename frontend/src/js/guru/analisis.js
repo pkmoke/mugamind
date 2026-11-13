@@ -64,7 +64,7 @@ export function renderAnalisis() {
             .length,
         ),
       ).join("") +
-      '<p class="small muted">Pilih salah satu tingkat di atas untuk melihat rincian per rombel (A–F).</p>';
+      '<p class="small muted">Pilih salah satu tingkat di atas untuk melihat rincian per rombel (A–D).</p>';
   } else {
     $("#judulRingkasan").textContent =
       "Ringkasan Kelas " + status.filterTingkat + " per Rombel";

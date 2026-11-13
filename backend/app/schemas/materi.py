@@ -2,7 +2,7 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 Tingkat = Literal["VII", "VIII", "IX"]
-Rombel = Literal["A", "B", "C", "D", "E", "F"]
+Rombel = Literal["A", "B", "C", "D"]
 Pendek = Annotated[str, Field(min_length=1, max_length=100, strict=True)]
 Bagian = Annotated[str, Field(min_length=1, max_length=4000, strict=True)]
 

@@ -23,24 +23,33 @@ class Confirm(BaseModel):
 
 class Akun(Confirm):
     nama: str = Field(min_length=1, max_length=150)
-    email: str = Field(
-        min_length=3, max_length=255, pattern=r"^[^\s@]+@[^\s@]+\.[^\s@]+$"
+    email: str | None = Field(
+        default=None,
+        max_length=255,
+        pattern=r"^[^\s@]+@[^\s@]+\.[^\s@]+$",
     )
-    peran: Literal["siswa", "guru"]
+    nis: str | None = Field(default=None, max_length=50)
+    peran: Literal["siswa", "guru"] = Field()
     tingkat: Literal["VII", "VIII", "IX"] | None = None
-    rombel: Literal["A", "B", "C", "D", "E", "F"] | None = None
+    rombel: Literal["A", "B", "C", "D"] | None = None
     aktif: bool = Field(default=True, strict=True)
 
     @model_validator(mode="after")
     def check(self):
         self.nama = self.nama.strip()
-        self.email = self.email.strip().lower()
-        if not self.nama or (
-            self.peran == "siswa" and not (self.tingkat and self.rombel)
-        ):
-            raise ValueError("Siswa wajib memiliki kelas")
+        self.email = (self.email or "").strip().lower() or None
+        self.nis = (self.nis or "").strip() or None
+        if not self.nama:
+            raise ValueError("Nama wajib diisi")
+        if self.peran == "siswa":
+            if not (self.tingkat and self.rombel):
+                raise ValueError("Siswa wajib memiliki kelas")
+            if not (self.email or self.nis):
+                raise ValueError("Siswa wajib memiliki NIS atau email")
         if self.peran == "guru":
-            self.tingkat = self.rombel = None
+            self.tingkat = self.rombel = self.nis = None
+            if not self.email:
+                raise ValueError("Guru wajib memiliki email")
         return self
 
 
@@ -56,7 +65,7 @@ class Tugas(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
     mapel: str = Field(min_length=1, max_length=100)
     tingkat: Literal["VII", "VIII", "IX"]
-    rombel: Literal["A", "B", "C", "D", "E", "F"]
+    rombel: Literal["A", "B", "C", "D"]
 
 
 class PenugasanRequest(Confirm):
@@ -112,6 +121,7 @@ def serialize(db, u):
         id=str(u.id),
         nama=u.nama,
         email=u.email,
+        nis=u.nis,
         peran=u.peran,
         tingkat=u.tingkat,
         rombel=u.rombel,
@@ -126,12 +136,18 @@ def serialize(db, u):
     )
 
 
-def unique_email(db, email, uid=0):
+def unique_email(db, email, nis=None, uid=0):
+    kondisi = []
+    if email:
+        kondisi.append(func.lower(Pengguna.email) == email)
+        kondisi.append(Pengguna.nis == email)
+    if nis:
+        kondisi.append(Pengguna.nis == nis)
+        kondisi.append(func.lower(Pengguna.email) == nis.lower())
+    if not kondisi:
+        return
     if db.scalar(
-        select(Pengguna.id).where(
-            Pengguna.id != uid,
-            or_(func.lower(Pengguna.email) == email, Pengguna.nis == email),
-        )
+        select(Pengguna.id).where(Pengguna.id != uid, or_(*kondisi))
     ):
         raise HTTPException(409, "Identitas sudah digunakan")
 
@@ -151,6 +167,7 @@ def daftar(
             or_(
                 Pengguna.nama.contains(q.strip(), autoescape=True),
                 Pengguna.email.contains(q.strip(), autoescape=True),
+                Pengguna.nis.contains(q.strip(), autoescape=True),
             )
         )
     if peran:
@@ -194,10 +211,11 @@ def ringkasan(user=Depends(require_admin), db: Session = Depends(get_db)):
 @router.post("/akun", status_code=201)
 def buat(data: BuatAkun, user=Depends(require_admin), db: Session = Depends(get_db)):
     confirm(db, user, data)
-    unique_email(db, data.email)
+    unique_email(db, data.email, data.nis)
     u = Pengguna(
         nama=data.nama,
         email=data.email,
+        nis=data.nis,
         peran=data.peran,
         tingkat=data.tingkat,
         rombel=data.rombel,
@@ -218,10 +236,10 @@ def ubah(
 ):
     confirm(db, user, data)
     u = target(db, uid)
-    unique_email(db, data.email, u.id)
+    unique_email(db, data.email, data.nis, u.id)
     if u.peran != data.peran:
         db.execute(delete(Penugasan).where(Penugasan.guru_id == u.id))
-    for key in ("nama", "email", "peran", "tingkat", "rombel"):
+    for key in ("nama", "email", "nis", "peran", "tingkat", "rombel"):
         setattr(u, key, getattr(data, key))
     control(db, u).aktif = data.aktif
     finish(db, user, u, "admin_account_updated")

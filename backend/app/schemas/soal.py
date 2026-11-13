@@ -2,7 +2,7 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 Pilihan = Annotated[str, Field(min_length=1, max_length=2000, strict=True)]
-Kelas = Annotated[str, Field(pattern=r"^(VII|VIII|IX) [A-F]$")]
+Kelas = Annotated[str, Field(pattern=r"^(VII|VIII|IX) [A-D]$")]
 
 
 class SoalCreate(BaseModel):

@@ -28,13 +28,14 @@ class TrialLoginRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
     nama: str = Field(min_length=2, max_length=100)
     tingkat: str = Field(pattern=r"^(VII|VIII|IX)$")
-    rombel: str = Field(pattern=r"^[A-F]$")
+    rombel: str = Field(pattern=r"^[A-D]$")
 
 
 def user_dict(db, p):
     return {
         "id": str(p.id),
         "nama": p.nama,
+        "nis": p.nis,
         "peran": p.peran,
         "tingkat": p.tingkat,
         "rombel": p.rombel,
@@ -59,7 +60,7 @@ def login(
 ):
     identitas = data.identitas.strip()
     # Satu sekolah bisa keluar dari satu IP publik; batas per akun tetap 8.
-    limit("login-ip:" + (request.client.host if request.client else "unknown"), 400, 900)
+    limit("login-ip:" + (request.client.host if request.client else "unknown"), 2000, 900)
     p = db.scalar(
         select(Pengguna).where(
             (func.lower(Pengguna.email) == identitas.lower()) | (Pengguna.nis == identitas)

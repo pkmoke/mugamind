@@ -66,6 +66,28 @@ Variabel lingkungan yang dipakai dibaca di `backend/app/config.py`
 (`APP_ORIGINS`, `ALLOWED_HOSTS`, `DATABASE_URL`, `AI_API_KEY`, `AI_MODEL`, kuota
 AI, masa retensi nilai/aktivitas).
 
+## Data siswa (tahun pelajaran 2026/2027)
+
+Data peserta didik diambil dari daftar resmi sekolah: 436 siswa, 12 rombel
+(VII A–D, VIII A–D, IX A–D). NIS dibuat berpola `2627` + nomor urut tiga digit
+(`2627001`–`2627436`), urut per tingkat, lalu per rombel, lalu alfabet nama.
+
+Daftar NIS dan kata sandi awal **tidak disimpan di repo** — berkasnya ada di
+`data-akun/` di mesin server (diabaikan git). Kata sandi awal dibagikan ke siswa
+lewat jalur sekolah dan wajib diganti saat pertama masuk.
+
+Impor ulang (mis. data semester baru):
+
+```
+docker compose cp data-akun/siswa-2627.csv backend:/tmp/siswa-2627.csv
+docker compose cp backend/impor_siswa.py backend:/app/impor_siswa.py
+docker compose exec -e PYTHONPATH=/app backend python /app/impor_siswa.py \
+  --file /tmp/siswa-2627.csv --sandi "<sandi-awal>"
+```
+
+Format CSV: `nama;nis;kelas` (kelas ditulis `VII A`). Akun yang NIS-nya sudah ada
+akan dilewati, jadi skrip ini aman dijalankan berulang.
+
 ## Sudah diuji dari repo ini
 
 Dengan SQLite (tanpa Docker): `manage.py init-db` → `manage.py user --peran admin`

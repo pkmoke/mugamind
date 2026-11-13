@@ -85,9 +85,11 @@ function isiMenuProfil() {
   const nama = pengguna.nama || "";
   $("#userAvatarMenu").textContent = (nama || "?").slice(0, 1);
   $("#userNamaMenu").textContent = nama;
+  const identitas =
+    pengguna.peran === "siswa" && pengguna.nis ? " · NIS " + pengguna.nis : "";
   $("#userPeranMenu").textContent =
     pengguna.peran === "siswa" && status.kelasSiswa
-      ? peran + " · " + status.kelasSiswa
+      ? peran + " · " + status.kelasSiswa + identitas
       : peran;
 }
 
