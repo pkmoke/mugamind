@@ -7,10 +7,10 @@
       name="viewport"
     />
     <title>MugaMind — Chatbot Pembelajaran SMP Muhammadiyah</title>
-    <link href="src/styles/dasar.css?v=20261109z" rel="stylesheet" />
-    <link href="src/styles/tata-letak.css?v=20261109z" rel="stylesheet" />
-    <link href="src/styles/halaman.css?v=20261109z" rel="stylesheet" />
-    <link href="src/styles/animasi.css?v=20261109z" rel="stylesheet" />
+    <link href="src/styles/dasar.css?v=20261112a" rel="stylesheet" />
+    <link href="src/styles/tata-letak.css?v=20261112a" rel="stylesheet" />
+    <link href="src/styles/halaman.css?v=20261112a" rel="stylesheet" />
+    <link href="src/styles/animasi.css?v=20261112a" rel="stylesheet" />
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
@@ -62,14 +62,36 @@
           </div>
           <div class="bidang">
             <label for="loginPass">Kata sandi</label>
-            <input
-              autocomplete="current-password"
-              id="loginPass"
-              maxlength="256"
-              placeholder="Masukkan kata sandi"
-              required=""
-              type="password"
-            />
+            <div class="bidang-sandi">
+              <input
+                autocomplete="current-password"
+                id="loginPass"
+                maxlength="256"
+                placeholder="Masukkan kata sandi"
+                required=""
+                type="password"
+              />
+              <button
+                aria-controls="loginPass"
+                aria-label="Tampilkan kata sandi"
+                aria-pressed="false"
+                class="lihat-sandi"
+                data-lihat-sandi="loginPass"
+                title="Tampilkan kata sandi"
+                type="button"
+              >
+                <svg aria-hidden="true" class="mata mata-buka" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path d="M2.2 12S5.6 5.4 12 5.4 21.8 12 21.8 12 18.4 18.6 12 18.6 2.2 12 2.2 12Z" />
+                  <circle cx="12" cy="12" r="3.1" />
+                </svg>
+                <svg aria-hidden="true" class="mata mata-tutup" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path d="M10.6 5.7A9.9 9.9 0 0 1 12 5.6c6.4 0 9.8 6.4 9.8 6.4a17 17 0 0 1-2.9 3.7" />
+                  <path d="M6.6 6.7A16.9 16.9 0 0 0 2.2 12s3.4 6.4 9.8 6.4a9.4 9.4 0 0 0 4.1-.9" />
+                  <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                  <path d="M3.5 3.5l17 17" />
+                </svg>
+              </button>
+            </div>
           </div>
           <p class="form-error" hidden="" id="loginError" role="alert"></p>
           <button class="btn primary lebar" data-act="masuk" type="submit">
@@ -2061,6 +2083,7 @@ Trakea adalah saluran udara yang menghubungkan laring dengan bronkus."
       </div>
     </div>
     <div aria-live="polite" class="toast" id="toast" role="status"></div>
-    <script src="src/js/main.js?v=20261109z" type="module"></script>
+    <script src="src/js/sandi.js?v=20261112a" type="module"></script>
+    <script src="src/js/main.js?v=20261112a" type="module"></script>
   </body>
 </html>

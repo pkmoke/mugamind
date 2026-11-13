@@ -765,3 +765,69 @@ body[data-theme="dark"] .kelas-pilih label:has(input:checked) {
   color: #A7F3D0;
   box-shadow: none;
 }
+
+/* ── Tombol lihat / sembunyikan kata sandi ───────────────────────── */
+.bidang-sandi { position: relative; }
+
+.bidang-sandi input { padding-right: 50px; }
+.bidang-sandi input::-ms-reveal,
+.bidang-sandi input::-ms-clear { display: none; }
+
+.lihat-sandi {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  color: var(--muted);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.18s ease, background-color 0.18s ease, transform 0.12s ease;
+}
+
+.lihat-sandi:hover { color: var(--hijau-tua); background: var(--hijau-soft); }
+.lihat-sandi:active { transform: translateY(-50%) scale(0.86); }
+.lihat-sandi:focus-visible { outline: 2px solid var(--hijau); outline-offset: 2px; }
+
+.lihat-sandi .mata {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transition: opacity 0.16s ease, transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lihat-sandi .mata-tutup { opacity: 0; transform: scale(0.55) rotate(-28deg); }
+.lihat-sandi[aria-pressed="true"] .mata-buka { opacity: 0; transform: scale(0.55) rotate(28deg); }
+.lihat-sandi[aria-pressed="true"] .mata-tutup { opacity: 1; transform: none; }
+
+.lihat-sandi::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--hijau);
+  opacity: 0;
+  transform: scale(0.55);
+  pointer-events: none;
+}
+
+.lihat-sandi.berdenyut::after { animation: sandi-denyut 0.45s ease-out; }
+
+@keyframes sandi-denyut {
+  0%   { opacity: 0.55; transform: scale(0.55); }
+  100% { opacity: 0;    transform: scale(1.35); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lihat-sandi,
+  .lihat-sandi .mata { transition: none; }
+  .lihat-sandi.berdenyut::after { animation: none; }
+}
+
+body[data-theme="dark"] .lihat-sandi:hover { background: rgba(16, 185, 129, 0.16); }
