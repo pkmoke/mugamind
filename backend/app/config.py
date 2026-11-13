@@ -18,13 +18,6 @@ HOSTS = [
     for s in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,testserver").split(",")
     if s.strip()
 ]
-_TUNNEL = "pictures-rouge-blues-himself.trycloudflare.com"
-if _TUNNEL not in HOSTS:
-    HOSTS.append(_TUNNEL)
-_torig = "https://" + _TUNNEL
-if _torig not in ORIGINS:
-    ORIGINS.append(_torig)
-
 COOKIE = "__Host-bemai_session" if HTTPS_ONLY else "bemai_session"
 SESSION_SECONDS = 8 * 3600
 MAX_BODY = 512 * 1024
